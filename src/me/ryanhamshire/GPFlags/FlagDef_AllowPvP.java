@@ -88,8 +88,11 @@ public class FlagDef_AllowPvP extends FlagDefinition
         if(flag != null) return;
         
         //otherwise disallow
-        event.setCancelled(true);
-        GPFlags.sendMessage(thrower, TextMode.Err, settings.pvpDeniedMessage);
+        //Inko: cancel only if the damaged entity is a player
+        if(event.getEntityType() == EntityType.PLAYER) {
+            event.setCancelled(true);
+            GPFlags.sendMessage(thrower, TextMode.Err, settings.pvpDeniedMessage);
+        }
     }
     
     //when an entity is set on fire
@@ -140,9 +143,13 @@ public class FlagDef_AllowPvP extends FlagDefinition
         if(flag != null) return;
 
         //otherwise disallow
-        event.setCancelled(true);
-        if(projectile != null) projectile.remove();
-        if(sendErrorMessagesToPlayers && damager instanceof Player) GPFlags.sendMessage((Player)damager, TextMode.Err, settings.pvpDeniedMessage);
+        //Inko: cancel only if the damaged entity is a player
+        if(event.getEntityType() == EntityType.PLAYER) {
+            event.setCancelled(true);
+            if (projectile != null) projectile.remove();
+            if (sendErrorMessagesToPlayers && damager instanceof Player)
+                GPFlags.sendMessage((Player) damager, TextMode.Err, settings.pvpDeniedMessage);
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
