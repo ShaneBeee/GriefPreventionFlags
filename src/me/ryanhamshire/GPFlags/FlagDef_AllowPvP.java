@@ -90,6 +90,8 @@ public class FlagDef_AllowPvP extends FlagDefinition
             flag = this.GetFlagInstanceAtLocation(event.getEntity().getLocation(), null);
             if (flag != null) return;
         }
+        //Inko: If a players wants to self harm, let him be so. (fixes Enderpearls not dealing damage)
+        if(thrower == event.getEntity()) return;
 
         //otherwise disallow
         //Inko: cancel only if the damaged entity is a player
@@ -149,6 +151,9 @@ public class FlagDef_AllowPvP extends FlagDefinition
             flag = this.GetFlagInstanceAtLocation(event.getEntity().getLocation(), null);
             if (flag != null) return;
         }
+
+        //Inko: If a players wants to self harm, let him be so. (fixes Enderpearls not dealing damage)
+        if(damager == event.getEntity()) return;
 
         //otherwise disallow
         //Inko: cancel only if the damaged entity is a player
