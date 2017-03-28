@@ -84,9 +84,13 @@ public class FlagDef_AllowPvP extends FlagDefinition
         if(!hasProtectableTarget) return;
         
         //if in a flagged-for-pvp area, allow
+        //Inko: except when the damaged entity is in a no-pvp zone
         Flag flag = this.GetFlagInstanceAtLocation(thrower.getLocation(), thrower);
-        if(flag != null) return;
-        
+        if(flag != null) {
+            flag = this.GetFlagInstanceAtLocation(event.getEntity().getLocation(), null);
+            if (flag != null) return;
+        }
+
         //otherwise disallow
         //Inko: cancel only if the damaged entity is a player
         if(event.getEntityType() == EntityType.PLAYER) {
@@ -139,8 +143,12 @@ public class FlagDef_AllowPvP extends FlagDefinition
         if(damager.getType() != EntityType.PLAYER && damager.getType() != EntityType.AREA_EFFECT_CLOUD) return;
 
         //if in a flagged-for-pvp area, allow
+        //Inko: except when the damaged entity is in a no-pvp zone
         Flag flag = this.GetFlagInstanceAtLocation(damager.getLocation(), null);
-        if(flag != null) return;
+        if(flag != null) {
+            flag = this.GetFlagInstanceAtLocation(event.getEntity().getLocation(), null);
+            if (flag != null) return;
+        }
 
         //otherwise disallow
         //Inko: cancel only if the damaged entity is a player
