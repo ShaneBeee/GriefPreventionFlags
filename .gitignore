@@ -1,0 +1,20 @@
+# Eclipse stuff
+/.classpath
+/.project
+/.settings
+
+# maven
+/target
+
+# vim
+.*.sw[a-p]
+
+# various other potential build files
+/build
+/bin
+/dist
+/lib
+/manifest.mf
+
+# Mac filesystem dust
+/.DS_Store
