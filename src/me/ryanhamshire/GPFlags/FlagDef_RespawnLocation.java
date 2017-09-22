@@ -40,7 +40,7 @@ public class FlagDef_RespawnLocation extends FlagDefinition
         this.respawnMap.put(player.getUniqueId(), respawnLocation);
     }
     
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent event)
     {
         Player player = event.getPlayer();
