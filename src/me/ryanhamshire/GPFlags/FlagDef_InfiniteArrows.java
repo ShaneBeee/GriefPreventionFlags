@@ -33,8 +33,12 @@ public class FlagDef_InfiniteArrows extends FlagDefinition
         if(flag == null) return;
         
         PlayerInventory inventory = player.getInventory();
+        
         ItemMeta meta = inventory.getItemInMainHand().getItemMeta();
-        if(meta != null && meta.hasEnchant(Enchantment.ARROW_INFINITE)) return;
+        if(meta != null && meta.hasEnchant(Enchantment.ARROW_INFINITE) && event.getEntityType() == EntityType.ARROW) return;
+        
+        ItemMeta metaOff = inventory.getItemInOffHand().getItemMeta();
+        if(metaOff != null && metaOff.hasEnchant(Enchantment.ARROW_INFINITE) && event.getEntityType() == EntityType.ARROW) return;
         
         arrow.remove();
         inventory.addItem(new ItemStack(Material.ARROW));
