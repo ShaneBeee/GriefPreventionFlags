@@ -29,6 +29,8 @@ public class FlagDef_InfiniteArrows extends FlagDefinition
         Player player = (Player)source;
         if(player.getGameMode() == GameMode.CREATIVE) return;
         
+        if(event.getHitEntity() == source) return;
+        
         Flag flag = this.GetFlagInstanceAtLocation(arrow.getLocation(), player);
         if(flag == null) return;
         
