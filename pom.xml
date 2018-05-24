@@ -4,7 +4,7 @@
 
     <groupId>me.ryanhamshire</groupId>
     <artifactId>GPFlags</artifactId>
-    <version>4.5.3</version>
+    <version>4.5.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>GriefPreventionFlags</name>
     <description>Administrative Flags fror GriefPrevention Claims.</description>
