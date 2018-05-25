@@ -29,21 +29,26 @@ public class FlagDef_InfiniteArrows extends FlagDefinition
         Player player = (Player)source;
         if(player.getGameMode() == GameMode.CREATIVE) return;
         
-        if(event.getHitEntity() == source) return;
-        
         Flag flag = this.GetFlagInstanceAtLocation(arrow.getLocation(), player);
         if(flag == null) return;
         
         PlayerInventory inventory = player.getInventory();
-        
         ItemMeta meta = inventory.getItemInMainHand().getItemMeta();
-        if(meta != null && meta.hasEnchant(Enchantment.ARROW_INFINITE) && event.getEntityType() == EntityType.ARROW) return;
+        if(meta != null && meta.hasEnchant(Enchantment.ARROW_INFINITE)) return;
         
-        ItemMeta metaOff = inventory.getItemInOffHand().getItemMeta();
-        if(metaOff != null && metaOff.hasEnchant(Enchantment.ARROW_INFINITE) && event.getEntityType() == EntityType.ARROW) return;
+        if(event.getEntityType() == EntityType.ARROW)
+        {
+         arrow.remove();
+         inventory.addItem(new ItemStack(Material.ARROW));
+         return;
+        }
         
-        arrow.remove();
-        inventory.addItem(new ItemStack(Material.ARROW));
+        if(event.getEntityType() == EntityType.SNOWBALL)
+        {
+         arrow.remove();
+         inventory.addItem(new ItemStack(Material.SNOW_BALL));
+         return;
+        }
     }
     
     public FlagDef_InfiniteArrows(FlagManager manager, GPFlags plugin)

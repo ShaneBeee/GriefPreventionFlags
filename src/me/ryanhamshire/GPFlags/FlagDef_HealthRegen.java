@@ -1,5 +1,6 @@
 package me.ryanhamshire.GPFlags;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 public class FlagDef_HealthRegen extends TimedPlayerFlagDefinition
@@ -13,7 +14,7 @@ public class FlagDef_HealthRegen extends TimedPlayerFlagDefinition
     @Override
     void processPlayer(Player player)
     {
-        if(player.getHealth() >= player.getMaxHealth()) return;
+        if((player.getHealth() >= player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue()) || player.isDead() == true) return;
         
         Flag flag = this.GetFlagInstanceAtLocation(player.getLocation(), player);
         if(flag == null) return;
@@ -32,7 +33,7 @@ public class FlagDef_HealthRegen extends TimedPlayerFlagDefinition
         }
         
         int newHealth = healAmount + (int)player.getHealth();
-        player.setHealth(Math.min(player.getMaxHealth(), newHealth));
+        player.setHealth(Math.min(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue(), newHealth));
     }
     
     /*@EventHandler(ignoreCancelled = true)
