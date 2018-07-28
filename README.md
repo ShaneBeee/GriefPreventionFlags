@@ -1,178 +1,238 @@
-# GriefPreventionFlags
+#GriefPreventionFlags
 
-I created this Minecraft server plugin using the Bukkit API to empower server admins to create unique experiences for players based on location in the world.  It's similar to WorldGuard, but it's more performant, easier to use, and includes many more useful flags than WorldGuard does.  It also doesn't require WorldEdit to run (unlike WorldGuard).  Admins can also empower players to self-serve by giving them access to specific flags, which they can then only use on land claims they own.
+GriefPrevention Flags is a plugin to allow admins to set flags for GriefPrevention claims. Either a single claim, or a global flag for all claims. It's similar to WorldGuard, but it's more performant, easier to use, and includes many more useful flags than WorldGuard does. It also doesn't require WorldEdit to run (unlike WorldGuard). Admins can also empower players to self-serve by giving them access to specific flags, which they can then only use on land claims they own.
 
-On my own servers, I used it to create PvP arenas, parkour challenges, a prison, a spleef arena, a snowball fight arena, fast travel teleporters, and a new player spawn where players never die or get stuck, and can't injure the animals or NPCs.
+Dependencies:
+- GriefPrevention (Must Have)
+- McMMo (Optional)
 
-I stopped working on this project after Minecraft 1.10.  Anyone may use my source code to continue the project, but see the LICENSE file for restrictions.
 
+COMMANDS
 
 
-Adds WorldGuard-style flags to GriefPrevention land claims, worlds, and servers! Designate PvP arenas, prevent monsters from spawning, add enter/exit messages, make nether portals run console commands, and more!
-![gpflagsBanner](https://s23.postimg.org/3ml0fxquz/gpflags_Banner.png) 
-​
-This plugin works very well for Minecraft 1.10, and some earlier versions are available for older versions of Minecraft. However, it will not be updated for future Minecraft versions because I've finally retired from Minecraft development (5 years of plugins!), and I'm moving on to develop indie games. :) You can follow me in my adventures here: 
+SetClaimFlag
+description: Sets a flag on a GriefPrevention land claim.
+usage: /SetClaimFlag <flag> <optional parameters>
+aliases: [setflag, placeflag, putflag, claimflag, placeclaimflag, putclaimflag]
+permission: gpflags.setflag
 
-facebook.com/BigScaryGames
+UnsetClaimFlag
+description: Un-sets (removes) a flag on a GriefPrevention land claim.
+usage: /UnSetClaimFlag <flag>
+aliases: [unsetflag, removeflag, unclaimflag, removeclaimflag]
+permission: gpflags.unsetflag
 
-**Features**
+SetDefaultClaimFlag
+description: Sets a flag on all GriefPrevention land claims.
+usage: /SetDefaultClaimFlag <flag> <optional parameters>
+aliases: [setdefaultflag, placedefaultflag, putdefaultflag, defaultclaimflag, placedefaultclaimflag, putdefaultclaimflag]
+permission: gpflags.defaultflags
 
-Doesn't require WorldEdit.
+UnsetDefaultClaimFlag
+description: Un-sets (removes) a default flag from all GriefPrevention land claims.
+usage: /UnSetClaimFlag <flag>
+aliases: [unsetdefaultflag, removedefaultflag, removedefaultclaimflag]
+permission: gpflags.defaultflags
 
-Very easy to use.
-GPFlags uses very simplified slash commands. Just stand in the land claim where you want to modify flags, then use easy commands. Suppose you wanted to disable monster spawning in your spawn area...
+ListClaimFlags
+description: Lists all the flags currently set on a GriefPrevention land claim.
+usage: /ListClaimFlags
+aliases: [listclaimflags, claimflags, listflags]
+permission: gpflags.listflags
 
-With WorldGuard:
-/region flag myregionname mob-spawning deny
+SetWorldFlag
+description: Sets a flag on an entire world.
+usage: /SetWorldFlag <flag> <optional parameters>
+aliases: [placeworldflag, putworldflag, worldflag]
+permission: gpflags.setworldflag
 
-With GPFlags:
-/setflag NoMonsterSpawns
+UnsetWorldFlag
+description: Un-sets (removes) a world-level flag.
+usage: /UnSetWorldFlag <flag>
+aliases: [unsetworldflag, removeworldflag, unworldflag]
+permission: gpflags.unsetworldflag
 
-The WorldGuard approach also assumes you named your region, and remember its name. ;)
+SetServerFlag
+description: Sets a flag everywhere.
+usage: /SetServerFlag <flag> <optional parameters>
+aliases: [placeserverflag, putserverflag, serverflag]
+permission: gpflags.setserverflag
 
-Performant.
-GPFlags doesn't waste CPU cycles on flag types which aren't in use, and all flags are designed to minimize compute time.
+UnsetServerFlag
+description: Un-sets (removes) a server-level flag.
+usage: /UnSetServerFlag <flag>
+aliases: [unsetserverflag, removeserverflag, unserverflag]
+permission: gpflags.unsetservrflag
 
-Easily set flags as "default on" for all land claims.
-This should make it easy, for example, to stop monsters from spawning on all player land claims including those claims which haven't been created yet. You can make exceptions for specific land claims or subdivisions.
+GPFReload
+description: Reloads GriefPrevention Flags configuration settings from its config file.
+usage: /GPFReload
+permission: gpflags.reload
 
-Easily set flags for entire worlds, or even for the entire server.
-You're not limited to flagging claimed areas. You can even use the inversion feature to apply a flag to everywhere EXCEPT for all land claims, or everywhere except for specific worlds, or specific worlds except for land claims in those worlds, or specific worlds except for specific land claims, or everywhere in the server except for specific land claims... it's very flexible.
 
-Empower your players to self-serve.
-Optionally give players access to specific flags (or all flags) via permissions. Players may only set flags in claims they own, so no worries about a player placing a flag in another player's area. You might for example allow players to set their own enter/exit messages, disable monster spawns in their claims, or completely deny claim access to anyone who doesn't have their permission.
+FLAGS
+All of these can be set on the claim or per-world, using the commands above.
 
-Created by an experienced and professional developer.
-This is a quality plugin that delivers what its description promises. I have a great track record for creating quality plugins and maintaining them over time.
 
-Messages are customizable, even into other languages.
-Use messages.yml to translate messages players receive into any other language.
+AllowPvP: 
+Allows for PvP.
 
-The YAML file format isn't always easy to work with, so please make a backup of your messages.yml file before reloading your server with message changes. Also, it helps to use a YAML editor like Notepad++, which can point out syntax errors while you edit.
+CommandWhiteList:
+Whitelists command usable.
 
-Available Flags
+CommandBlackList:
+Blacklists command usable.
 
-NoMonsterSpawns - Disables all monster spawns except for dungeon spawners and spawn eggs (both of which GriefPrevention limits to players with build permission in land claims). Also removes monsters which spawn outside the flagged area and then wander in.
+EnterCommand:
+Executes a console command when entering a claim.
 
-NoMobSpawns - Prevents ALL mobs from spawning (not just monsters) in an area. Same exceptions as for the NoMonsterSpawns flag above.
+EnterMessage:
+Sends a message to the player when entering a claim.
 
-AllowPvP - This is the flag for creating PvP arenas, where players can fight. This flag overrides GriefPrevention's PvP protections in land claims where you set it, allowing players who are standing in an AllowPvP area to damage other players. If you want to also disable PvP in the wilderness (outside of land claims), you can do that in the GriefPreventionFlags config file (it's a per-world setting).
+ExitCommand:
+Executes a console command when exiting a claim.
 
-EnterMessage / ExitMessage - Sends a message to players when they enter or exit (respectively) a land claim. These messages support formatting codes using the dollar sign ($). Example usage: /SetFlag EnterMessage $1Welcome to %owner%'s house!
+ExitMessage:
+Sends a message to the player when exiting a claim.
 
-NetherPortalConsoleCommand - Runs one or more console commands when a player steps through a nether portal in the flagged area. Use %name% or %uuid% placeholders to target the player stepping through the portal, and separate multiple command lines with semicolons [;]. If your in-game command entry box is too short for all your commands, consider backing-up your flags.yml file and then modifying it with a text editor to get more command lines in for a single portal, then using /GPFReload to load your edited file. Example usage: /SetFlag NetherPortalConsoleCommand tp %name% 0, 65, 0;xp 10L %name%
+HealthRegen:
+Sets health regeneration values.
 
-EnterCommand - Executes one or more console commands when a player enters the flagged area, similar to NetherPortalConsoleCommand.
+InfiniteArrows:
+Disables arrow consumption on bows.
 
-ExitCommand - Executes one or more console commands when a player exits the flagged area, similar to NetherPortalConsoleCommand.
+KeepInventory
+Prevents losing items on death.
 
-NoEnter - Requires players to have /AccessTrust or higher permission in a land claim (or the gpflags.bypass permission node) before they may move into a flagged area. This flag requires an explanatory message, which will be sent to any rejected player, and is only effective when applied to land claims (not worlds). Example usage: /SetFlag NoEnter You don't have the %owner%'s permission to enter this area.
+KeepLevel
+Prevents losing levels on death.
 
-CommandBlackList - Prevents players from using any commands you list in the flagged area, unless they have the gpflags.bypass permission. Example usage: /SetFlag CommandBlackList sethome;setwarp;kit
+NetherPortalConsoleCommand
+Executes console command when entering a Portal.
 
-CommandWhiteList - flag prevents players from using any commands except those you list in the flagged area, unless they have the gpflags.bypass permission. Example usage: /SetFlag CommandWhiteList tell;me;home
+NetherPortalPlayerCommand
+Executes player command when entering a Portal.
 
-HealthRegen - Regenerates the amount of health you specify every 5 seconds for any players in the flagged area. To give you a sense of scale when setting this flag's regeneration rate, default max player health is 20. Example usage: /SetFlag HealthRegen 5
+NoChorusFruit
+Disables chorus fruits teleportation.
 
-NoHunger - Prevents damage from starvation and food level loss for all players inside the flagged area. (Food level may be momentarily lost, but will be restored to its previous value shortly). Optionally, you may specify an amount of food level to be regenerated per 5 seconds. For example: /SetFlag NoHunger 5 would regenerate 5 food levels per five seconds (max food level is 20).
+NoCombatLoot
+Clears drops on entity death.
 
-NoMobDamage - Disables non-player damage to passive mobs and named aggressive mobs. Player damage is already limited by GriefPrevention (/ContainerTrust for animals, /Trust for villagers, but named monsters are never protected). One use of this flag might be to protect your spawn animals/villagers from monsters and clever players who might push them into lava, off a cliff, or under a waterfall.
+NoEnderPearl
+Disables ender pearls teleportation.
 
-NoPetDamage - cancels ALL damage to pets in flagged areas, even direct damage from their owners. A "pet" is any tameable entity with an owner, like a dog, cat, or horse for example.
+NoEnter
+Disables entering claim for players without at least /accesstrust.
 
-RespawnLocation - Overrides the usual respawn rules to respawn the player in a specific location who dies in the flagged area. For example, consider respawning a player at the beginning of a parkour challenge or just outside a pvp arena. You may optionally specify pitch and yaw (facing direction) as well. Example usages: /SetFlag RespawnLocation world 112.5 68 265.5 or /SetFlag RespawnLocation world 112.5 68 265.5 90 45
+NoExpiration
+Disables claim expiration.
 
-KeepInventory - If a player dies in an area where this flag is active, he will keep his inventory instead of dropping it on the ground.
+NoFlight
+Disables plugin flight in the claim.
 
-InfiniteArrows - When an arrow lands in an area where this flag is active, the arrow will be sent back to the firing player's inventory. This includes arrows which hit live targets like monsters and other players, and they will still deal damage. This cannot be used to duplicate arrows using an infinity-enchanted bow. A great option for shooting ranges and combat arenas!
+NoFluidFlow
+Disables fluid flows.
 
-KeepLevel - When a player dies in an area where KeepLevel is active, he or she will not lose (or drop) any experience.
+NoHunger
+Disables hunger decay.
 
-NetherPortalPlayerCommand - Causes any players who walk into a nether portal in the area where the flag is applied to automatically run a command line instead of teleporting (it runs as the player, not as a console command). Helpful to give players a /home portal or random wilderness teleport portal, for example.
+NoItemDrop
+Disables dropping items.
 
-NoCombatLoot - When a mob (except for players) dies in an area with this flag active, no loot will drop. Using this, you can create combat challenges where players can keep their inventories and experience (with other flags above), but prevent players from abusing those flags to farm loot. Player death loot is controlled by the above KeepInventory flag.
+NoItemPickup
+Disables picking up items.
 
-NoPlayerDamage - Prevents ALL damage to players in areas where it's set. Think about new player starting areas, non-lethal parkour challenges, and secrets hidden underneath presumably lethal lava pools! :)
+NoLeafDecay
+Disables leaf decay.
 
-NoFluidFlow - Prevents source fluid (water, lava) blocks from spreading in the flagged area. Note that GriefPrevention already prevents fluids from flowing into land claims from outside.
+NoLootProtection
+Disables loot protection on player death.
 
-NoFlight - Prevents players from legitimately flying (this is not a no-cheating flag, see other plugins to fight hacked clients) in the flagged area. Invincible players will fall when entering the area, while others will be teleported down to the first non-air block beneath them.
+NoMcMMODeathPenalty
+Disables McMMO death penalty.
 
-NoWeatherChange - prevents weather from changing in a world, even by operators using commands. If you change your mind about the weather in a world, you have to first disable the flag, then change the weather, then re-enable the flag. You should use this only with /setserverflag or /setworldflag, because it has no effect on individual land claims or subdivisions. Note: If you lock the weather during a thunderstorm, it will never end. If you lock the weather when there is no thunder, a storm will never come.
+NoMcMMOSkills
+Disables McMMO experience gaining in the claim.
 
-TrappedDestination - Allows players to use GriefPrevention's /trapped command in administrative land claims by specifying where the player will go when he gets "unstuck". Ordinarily, administrative land claims don't allow players to use the command at all.
+NoMobDamage
+Disables mob damage.
 
-NoLootProtection - Disables GriefPrevention's player death loot "anti-theft" feature in the flagged area, allowing any player to pick up the items a player drops when he or she dies in that area. Useful for competitive areas where loot can be a reward, like PvP arenas.
+NoMobSpawns
+Disables mob spawns (Except Eggs and Monster Spawners).
 
-NoMcMMOSkills - Prevents mcMMO skill usage (activated skills, secondary skills, disarms, etc) in the flagged area. You might use this to create PvE challenge areas or specialized PvP arenas where mcMMO won't give some players an advantage over others.
+NoMonsterSpawns
+Disables monster spawns and removes mobs wandering in the claim.
 
-NoMcMMODeathPenalty - cancels McMMODeathPenalties when a player dies in a flagged area.
+NoPetDamage
+Disables damaging of pets.
 
-NoLeafDecay - Prevents leaves in the flagged area from disappearing when the logs holding them up are removed.
+NoPlayerDamage
+Disables damaging of players.
 
-NoItemDrop - Prevents players from dropping items in a flagged area.
+NoWeatherChange
+Disables weather change.
 
-NoChorusFruit - Prevents players from teleporting from or to a flagged area using chorus fruit.
+RespawnLocation
+Sets spawn location for the claim (Useful for PvP arenas).
 
-SpleefArena - Completely automates a Spleef minigame (players compete to remove blocks out from under each other until someone falls) in the flagged area. Example usage: /SetFlag SpleefArena 35:6 45 20
+SpleefArena
+Complex flag to create spleef arenas.
 
-The above example will generate a pink wool block (id:data = 35:6) 20 blocks above every bricks block (id = 45) in the flagged area every time a player dies in the flagged area. It will also allow ONLY pink wool blocks to be broken by any player even without build permission, and won't drop those blocks as items when they're broken.
+TrappedDestination
+Sets trapped destinationfor the claim (Useful for admin claims).
 
-To set up a spleef arena, first flag the claim or subdivision as shown above. Then dig down underneath where the breakable arena surface (pink wool in the above example) will be and use your marker blocks (bricks in the above example) to indicate the shape of your arena, which does NOT have to be flat, rectangular, or single-block thick. The y offset (the last flag parameter) dictates how far down you have to place the marker blocks from where you want the arena surface to generate. To test your settings, use the Vanilla /kill command while standing in the flagged area. Your death will trigger the arena surface to be built per your specifications.
 
-Use the discussion tab to tell me which flags you want to see added the most! :)
+PERMISSIONS
 
-Limitations vs. WorldGuard
 
-If you're considering replacing WorldGuard, please review this first. For most servers, these won't be important limitations. :) However, I ask that you review these before you buy. There is no reason you can't continue to use WorldGuard alongside GriefPrevention Flags, to get the best of both.
+gpflags.admin.*:
+description: Grants all administrative functionality.
 
-Land claims do not overlap or stack vertically, and always reach to max build height. These are GriefPrevention limitations which make land claims easy to manage. If for example you wanted to disable PvP in an area which already includes some land claims, you would have to either convert those land claims into subdivisions of a larger land claim and set the flag on that big claim, OR use a WorldGuard region with passthrough set for all players.
+gpflags.setflag:
+description: Grants permission to use /SetClaimFlag. (Does not actually give the permission to set any flag, just use the command)
+default: op
 
-Some of WorldGuard's lesser-used flags are not supported by GPFlags simply because they're not needed. If you need one of them, please post in the discussion tab and I will happily add it.
+gpflags.unsetflag:
+description: Grants permission to use /UnSetClaimFlag.
+default: op
 
-Situational limitations aside, GPFlags includes many very powerful and flexible flags WorldGuard does not (see above), and it's also much more performant on the whole - even when you add GriefPrevention's CPU usage, and don't penalize WorldGuard for -required- WorldEdit's CPU usage!
+gpflags.setworldflag:
+description: Grants permission to use /SetWorldFlag.
+default: op
 
-**Installation**
+gpflags.unsetworldflag:
+description: Grants permission to use /UnSetWorldFlag.
+default: op
 
-Copy the JAR file into your server's plugins folder and then execute the /reload command (or reboot the server). Easy! :)
+gpflags.setserverflag:
+description: Grants permission to use /SetServerFlag.
+default: op
 
-**Commands** 
+gpflags.unsetserverflag:
+description: Grants permission to use /UnSetServerFlag.
+default: op
 
-SetFlag <Flag> <Parameters> - Sets a flag on the GriefPrevention land claim you're currently in. Most flags don't require any parameters.
+gpflags.defaultflags:
+description: Grants permission to use /SetDefaultClaimFlag and /UnSetDefaultClaimFlag.
+default: op
 
-UnSetFlag <Flag> - Removes a flag from the GriefPrevention land claim you're currently in.
+gpflags.listflags:
+description: Grants permission to use /ListClaimFlags.
+default: op
 
-SetWorldFlag <Flag> <Parameters> - Sets a flag on the world you're currently in. Most flags don't require any parameters.
+gpflags.reload:
+description: Grants permission to use /GPFReload.
+default: op
 
-UnSetWorldFlag <Flag> - Removes a flag from the world you're currently in.
+gpflags.allflags:
+description: Grants permission to apply/remove all flags.
+default: op
 
-SetServerFlag <Flag> <Parameters> - Sets a flag across the entire server. Most flags don't require any parameters.
+gpflags.bypass:
+description: Makes a player immune to the limitations of flags like CommandBlackList, NoEnter, and NoFlight.
+default: op
 
-UnSetServerFlag <Flag> - Removes a server-level flag.
-
-ListFlags - Lists all the flags set on the GriefPrevention land claim you're currently in.
-
-SetDefaultFlag <Flag> <Parameters> - Sets a flag on all claims except for those you explicitly exempt with /UnSetFlag.
-
-UnSetDefaultFlag <Flag> - Reverses /SetDefaultFlag.
-
-GPFReload - Reloads configuration settings from the GPFlags config file.
-
-**Permissions**
-
-gpflags.admin.* - Sets all of the below, for your convenience.
-gpflags.setflag
-gpflags.unsetflag
-gpflags.setworldflag
-gpflags.unsetworldflag
-gpflags.setserverflag
-gpflags.unsetserverflag
-gpflags.listflags
-gpflags.defaultflags
-gpflags.reload
-gpflags.allflags - Grants permission to place/remove all flags.
-gpflags.bypass - Makes a player immune to limiting flags like NoEnter and CommandBlackList.
-
-To grant permissions to use only specific flags, use the flag name. For example, gpflags.nomonsterspawns. Changing the flags on a land claim requires the player making the change to have EDIT permission on the land claim. Generally, this means the claim creator only or administrators in the case of administrative land claims.
-
-Editing another player's land claim requires Grief Prevention's griefprevention.deleteclaims permission.
+gpflags.<FLAGNAME>:
+description: Gives to the user the permission to set a specific flag, for example gpflags.ExitMessage allows users to do /SetClaimFlag ExitMessage if they have the permission to set flags.
+default: op

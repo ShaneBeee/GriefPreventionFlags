@@ -5,20 +5,16 @@ import java.util.Collection;
 import me.ryanhamshire.GriefPrevention.EntityEventHandler;
 import me.ryanhamshire.GriefPrevention.events.PreventPvPEvent;
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Tameable;
-import org.bukkit.entity.ThrownPotion;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.ProjectileSource;
 
 public class FlagDef_AllowPvP extends FlagDefinition
@@ -83,8 +79,7 @@ public class FlagDef_AllowPvP extends FlagDefinition
         
         if(!hasProtectableTarget) return;
         
-        //if in a flagged-for-pvp area, allow
-        //Inko: except when the damaged entity is in a no-pvp zone
+        //if thrower and potion in a flagged-for-pvp area, allow
         Flag flag = this.GetFlagInstanceAtLocation(thrower.getLocation(), thrower);
         if(flag != null) {
             flag = this.GetFlagInstanceAtLocation(event.getEntity().getLocation(), null);
@@ -94,13 +89,77 @@ public class FlagDef_AllowPvP extends FlagDefinition
         if(thrower == event.getEntity()) return;
 
         //otherwise disallow
-        //Inko: cancel only if the damaged entity is a player
-        if(event.getEntityType() == EntityType.PLAYER) {
-            event.setCancelled(true);
-            GPFlags.sendMessage(thrower, TextMode.Err, settings.pvpDeniedMessage);
+        event.setCancelled(true);
+        GPFlags.sendMessage(thrower, TextMode.Err, settings.pvpDeniedMessage);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void onEntityDamagebyBlock (EntityDamageByBlockEvent event)
+    {
+            WorldSettings settings = this.settingsManager.Get(event.getEntity().getWorld());
+            if(!settings.pvpRequiresClaimFlag) return;
+
+            //we care only for bed bombing
+            if(event.getCause() != DamageCause.BLOCK_EXPLOSION) return;
+
+            //protect only those that need to be protected
+            Entity effected = event.getEntity();
+            boolean setForCancellation = false;
+            if(effected instanceof Player)
+            {
+                setForCancellation = true;
+            }
+            else if(effected instanceof Tameable)
+            {
+                Tameable pet = (Tameable) effected;
+                if (pet.isTamed() && pet.getOwner() != null) {
+                    setForCancellation = true;
+                }
+            }
+            event.setCancelled(setForCancellation);
+    }
+
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void onLingeringApplyEvent (AreaEffectCloudApplyEvent event)
+    {
+        AreaEffectCloud areaEffectCloud = event.getEntity();
+        ProjectileSource shooter = areaEffectCloud.getSource();
+        if(shooter == null || !(shooter instanceof Player)) return;
+        Player thrower = (Player)shooter;
+
+        //check for negative effects
+        PotionType potionType = areaEffectCloud.getBasePotionData().getType();
+        if(!(potionType == PotionType.POISON || potionType == PotionType.INSTANT_DAMAGE || potionType == PotionType.SLOWNESS || potionType == PotionType.WEAKNESS)) {
+            return;
+        }
+
+        //if not in a no-pvp world, we don't care
+        WorldSettings settings = this.settingsManager.Get(areaEffectCloud.getWorld());
+        if(!settings.pvpRequiresClaimFlag) return;
+
+        //remove all players and protectable entities if they are not PvPing
+        boolean isLingeringinPvP = (this.GetFlagInstanceAtLocation(areaEffectCloud.getLocation(), null) != null);
+        boolean pvpAtLocations = false;
+        for(LivingEntity effected : event.getAffectedEntities())
+        {
+            pvpAtLocations = isLingeringinPvP && (this.GetFlagInstanceAtLocation(effected.getLocation(), null) != null);
+
+            if((effected instanceof Player && effected != thrower) && !pvpAtLocations)
+            {
+                event.getAffectedEntities().remove(effected);
+            }
+            else if(effected instanceof Tameable)
+            {
+                Tameable pet = (Tameable)effected;
+                if((pet.isTamed() && pet.getOwner() != null) && !pvpAtLocations)
+                {
+                    event.getAffectedEntities().remove(effected);
+                }
+            }
         }
     }
-    
+
     //when an entity is set on fire
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onEntityCombustByEntity (EntityCombustByEntityEvent event)
@@ -112,9 +171,11 @@ public class FlagDef_AllowPvP extends FlagDefinition
         this.handleEntityDamageEvent(eventWrapper, false);
         event.setCancelled(eventWrapper.isCancelled());
     }
-    
+
     private void handleEntityDamageEvent(EntityDamageByEntityEvent event, boolean sendErrorMessagesToPlayers)
     {
+        boolean setForCancellation = false;
+        //we want to cancel only events that involve tamed animals and players
         if(event.getEntityType() != EntityType.PLAYER)
         {
             Entity entity = event.getEntity();
@@ -122,11 +183,14 @@ public class FlagDef_AllowPvP extends FlagDefinition
             {
                 Tameable pet = (Tameable)entity;
                 if(!pet.isTamed() || pet.getOwner() == null) return;
+                else if(pet.getOwner() == event.getDamager()) return;
+                else setForCancellation = true;
             }
-        }
+        } else if(event.getEntityType() == EntityType.PLAYER)
+            setForCancellation = true;
 
         Entity damager = event.getDamager();
-        if(damager == null)  return;
+        if(damager == null) return;
 
         //if not in a no-pvp world, we don't care
         WorldSettings settings = this.settingsManager.Get(damager.getWorld());
@@ -141,28 +205,37 @@ public class FlagDef_AllowPvP extends FlagDefinition
                 damager = (Player)projectile.getShooter();
             }
         }
-        
-        if(damager.getType() != EntityType.PLAYER && damager.getType() != EntityType.AREA_EFFECT_CLOUD) return;
 
-        //if in a flagged-for-pvp area, allow
-        //Inko: except when the damaged entity is in a no-pvp zone
+        //player placed tnt shouldn't harm other players
+        if(damager.getType() == EntityType.PRIMED_TNT){
+            TNTPrimed tnt = (TNTPrimed)damager;
+            //is null when redstone activated, allows for desert temple traps. Also let players self harm
+            if(tnt.getSource() == null || tnt.getSource().getType() != EntityType.PLAYER || (tnt.getSource()).equals(event.getEntity()))
+                return;
+            else setForCancellation = true;
+        }
+
+
+        //If the damager is not a player, let him harm.
+        if(damager.getType() != EntityType.PLAYER && damager.getType() != EntityType.PRIMED_TNT) return;
+
+
+
+        //if damager and damaged a flagged-for-pvp area, allow
         Flag flag = this.GetFlagInstanceAtLocation(damager.getLocation(), null);
         if(flag != null) {
             flag = this.GetFlagInstanceAtLocation(event.getEntity().getLocation(), null);
             if (flag != null) return;
         }
 
-        //Inko: If a players wants to self harm, let him be so. (fixes Enderpearls not dealing damage)
+        //Inko: Let players self harm
         if(damager == event.getEntity()) return;
 
-        //otherwise disallow
-        //Inko: cancel only if the damaged entity is a player
-        if(event.getEntityType() == EntityType.PLAYER) {
-            event.setCancelled(true);
-            if (projectile != null) projectile.remove();
-            if (sendErrorMessagesToPlayers && damager instanceof Player)
-                GPFlags.sendMessage((Player) damager, TextMode.Err, settings.pvpDeniedMessage);
-        }
+        event.setCancelled(setForCancellation);
+        if (projectile != null) projectile.remove();
+        if (setForCancellation && sendErrorMessagesToPlayers && damager instanceof Player)
+            GPFlags.sendMessage((Player) damager, TextMode.Err, settings.pvpDeniedMessage);
+
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

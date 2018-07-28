@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 public class FlagDef_NoItemPickup extends FlagDefinition
 {
     @EventHandler(priority = EventPriority.LOWEST)
+
     public void onPlayerPickupItem(EntityPickupItemEvent event)
     {
         if (event.getEntity() instanceof Player)

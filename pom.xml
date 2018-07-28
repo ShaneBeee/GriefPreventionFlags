@@ -4,15 +4,15 @@
 
     <groupId>me.ryanhamshire</groupId>
     <artifactId>GPFlags</artifactId>
-    <version>4.5.4-SNAPSHOT</version>
+    <version>4.5.5</version>
     <packaging>jar</packaging>
     <name>GriefPreventionFlags</name>
     <description>Administrative Flags fror GriefPrevention Claims.</description>
     <url>https://github.com/BigScary/GriefPreventionFlags</url>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <build.number>${buildNumber}</build.number>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -23,12 +23,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.ryanhamshire</groupId>
+            <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>16.7.1</version>
-            <type>jar</type>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/GriefPrevention.jar</systemPath>
+            <version>16.8</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
@@ -54,8 +52,12 @@
             <url>http://ci.drtshock.net/plugin/repository/everything/</url>
         </repository>
         <repository>
-            <id>mcmmo-repo</id>
-            <url>http://repo.mcmmo.org/</url>
+            <id>mcMMO</id>
+            <url>http://ci.drtshock.net/job/MCMMO/lastSuccessfulBuild/maven-repository/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
