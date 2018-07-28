@@ -46,7 +46,7 @@ public class FlagDef_InfiniteArrows extends FlagDefinition
         if(event.getEntityType() == EntityType.SNOWBALL) 
         {
          arrow.remove();
-         inventory.addItem(new ItemStack(Material.SNOW_BALL));
+         inventory.addItem(new ItemStack(Material.SNOWBALL));
          return;
         }
     }

@@ -19,7 +19,7 @@ public class FlagDef_NetherPortalConsoleCommand extends FlagDefinition
         if(cause == null || cause != TeleportCause.NETHER_PORTAL) return;
         
         Location from = event.getFrom();
-        if(from.getBlock().getType() != Material.PORTAL)
+        if(from.getBlock().getType() != Material.NETHER_PORTAL)
         {
             event.setCancelled(true);
             return;
