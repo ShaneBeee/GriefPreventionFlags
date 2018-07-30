@@ -169,7 +169,7 @@ public class FlagsDataStore
         this.addDefault(defaults, Messages.EnableNoChorusFruit, "Now blocking chorus fruit teleportation in this area.", null);
         this.addDefault(defaults, Messages.DisableNoChorusFruit, "Stopped blocking chorus fruit teleportation in this area.", null);
         
-        this.addDefault(defaults, Messages.SpleefArenaHelp, "Example syntax: '45 95:1 15'.  See the GriefPrevention Flags page on spigotmc.org for more help.", null);
+        this.addDefault(defaults, Messages.SpleefArenaHelp, "Example syntax: 'minecraft:snow_block minecraft:bricks 20'. See the GriefPrevention Flags page on spigotmc.org for more help.", null);
         this.addDefault(defaults, Messages.SetSpleefArena, "Now allowing some block types to be destroyed, and automatically regenerating them when players die in this area.", null);
         this.addDefault(defaults, Messages.UnSetSpleefArena, "Stopped overriding Grief Prevention's block breaking rules and generating blocks when players die in this area.", null);
         

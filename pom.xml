@@ -4,7 +4,7 @@
 
     <groupId>me.ryanhamshire</groupId>
     <artifactId>GPFlags</artifactId>
-    <version>4.5.5</version>
+    <version>4.6.0</version>
     <packaging>jar</packaging>
     <name>GriefPreventionFlags</name>
     <description>Administrative Flags fror GriefPrevention Claims.</description>
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.13-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

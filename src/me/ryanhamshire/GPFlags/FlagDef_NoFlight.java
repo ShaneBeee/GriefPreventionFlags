@@ -32,7 +32,7 @@ public class FlagDef_NoFlight extends TimedPlayerFlagDefinition
         if(mode != GameMode.CREATIVE && mode != GameMode.SPECTATOR)
         {
         	Block block = player.getLocation().getBlock();
-        	while(block.getY() > 2 && !block.getType().isSolid() && block.getType() != Material.STATIONARY_WATER)
+        	while(block.getY() > 2 && !block.getType().isSolid() && block.getType() != Material.WATER)
         	{
         		block = block.getRelative(BlockFace.DOWN);
         	}
