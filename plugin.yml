@@ -2,7 +2,7 @@ name: 'GriefPreventionFlags'
 main: me.ryanhamshire.GPFlags.GPFlags
 depend: [GriefPrevention]
 softdepend: [mcMMO]
-version: 4.6.0
+version: 4.6.1
 api-version: 1.13
 commands:
    setclaimflag:

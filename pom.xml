@@ -4,10 +4,10 @@
 
     <groupId>me.ryanhamshire</groupId>
     <artifactId>GPFlags</artifactId>
-    <version>4.6.0</version>
+    <version>4.6.1</version>
     <packaging>jar</packaging>
     <name>GriefPreventionFlags</name>
-    <description>Administrative Flags fror GriefPrevention Claims.</description>
+    <description>Administrative Flags for GriefPrevention Claims.</description>
     <url>https://github.com/BigScary/GriefPreventionFlags</url>
 
     <properties>
@@ -19,13 +19,13 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>16.8</version>
+            <version>16.9.alpha</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -84,8 +84,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>    
