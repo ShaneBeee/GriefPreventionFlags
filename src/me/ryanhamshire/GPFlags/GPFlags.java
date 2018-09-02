@@ -24,6 +24,8 @@ import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.PlayerData;
 
+import org.bstats.bukkit.Metrics;
+
 public class GPFlags extends JavaPlugin
 {
 	//for convenience, a reference to the instance of this plugin
@@ -54,8 +56,8 @@ public class GPFlags extends JavaPlugin
 	    instance = this;
         
 	    this.loadConfig();
-	    
-	    
+
+        Metrics metrics = new Metrics(this);
         
         AddLogEntry("Boot finished.");
 	}
