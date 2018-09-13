@@ -4,7 +4,7 @@
 
     <groupId>me.ryanhamshire</groupId>
     <artifactId>GPFlags</artifactId>
-    <version>4.6.1</version>
+    <version>4.6.2</version>
     <packaging>jar</packaging>
     <name>GriefPreventionFlags</name>
     <description>Administrative Flags for GriefPrevention Claims.</description>
@@ -109,6 +109,7 @@
                             <shadedPattern>me.ryanhamshire.GPFlags</shadedPattern>
                         </relocation>
                     </relocations>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
                 </configuration>
                 <executions>
                     <execution>

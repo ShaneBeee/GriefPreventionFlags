@@ -356,6 +356,7 @@ public class GPFlags extends JavaPlugin
 		if(player == null)
 		{
 		    GPFlags.AddLogEntry("You must be logged into the game to use that command.");
+		    return false;
 		}
 		
 		if(cmd.getName().equalsIgnoreCase("SetWorldFlag") && player != null)
