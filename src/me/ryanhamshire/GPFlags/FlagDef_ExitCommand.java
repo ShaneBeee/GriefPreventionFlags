@@ -1,5 +1,7 @@
 package me.ryanhamshire.GPFlags;
 
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
+import me.ryanhamshire.GriefPrevention.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,8 +17,9 @@ public class FlagDef_ExitCommand extends PlayerMovementFlagDefinition
         if(flag == null) return true;
         
         if(flag == this.GetFlagInstanceAtLocation(to, player)) return true;
-        
-        String [] commandLines = flag.parameters.replace("%name%", player.getName()).replace("%uuid%", player.getUniqueId().toString()).split(";");
+
+        PlayerData playerData = GriefPrevention.instance.dataStore.getPlayerData(player.getUniqueId());
+        String [] commandLines = flag.parameters.replace("%owner%", playerData.lastClaim.getOwnerName()).replace("%name%", player.getName()).replace("%uuid%", player.getUniqueId().toString()).split(";");
         for(String commandLine : commandLines)
         {
             GPFlags.AddLogEntry("Exit command: " + commandLine);

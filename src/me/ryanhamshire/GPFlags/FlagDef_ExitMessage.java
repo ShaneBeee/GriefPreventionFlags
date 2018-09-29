@@ -22,7 +22,7 @@ public class FlagDef_ExitMessage extends PlayerMovementFlagDefinition
         String message = flag.parameters;
         if(playerData.lastClaim != null)
         {
-            message = message.replace("%owner%", playerData.lastClaim.getOwnerName());
+            message = message.replace("%owner%", playerData.lastClaim.getOwnerName()).replace("%name%", player.getName());
         }
         
         GPFlags.sendMessage(player, TextMode.Info, message);
