@@ -13,7 +13,7 @@ public class FlagDef_HealthRegen extends TimedPlayerFlagDefinition
     @Override
     void processPlayer(Player player)
     {
-        if(player.getHealth() >= player.getMaxHealth()) return;
+        if((player.getHealth() >= player.getMaxHealth()) || player.isDead() == true) return;
         
         Flag flag = this.GetFlagInstanceAtLocation(player.getLocation(), player);
         if(flag == null) return;
