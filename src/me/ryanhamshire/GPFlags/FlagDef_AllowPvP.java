@@ -84,12 +84,21 @@ public class FlagDef_AllowPvP extends FlagDefinition
         if(!hasProtectableTarget) return;
         
         //if in a flagged-for-pvp area, allow
+        //Inko: except when the damaged entity is in a no-pvp zone
         Flag flag = this.GetFlagInstanceAtLocation(thrower.getLocation(), thrower);
-        if(flag != null) return;
-        
+        if(flag != null) {
+            flag = this.GetFlagInstanceAtLocation(event.getEntity().getLocation(), null);
+            if (flag != null) return;
+        }
+        //Inko: If a players wants to self harm, let him be so. (fixes Enderpearls not dealing damage)
+        if(thrower == event.getEntity()) return;
+
         //otherwise disallow
-        event.setCancelled(true);
-        GPFlags.sendMessage(thrower, TextMode.Err, settings.pvpDeniedMessage);
+        //Inko: cancel only if the damaged entity is a player
+        if(event.getEntityType() == EntityType.PLAYER) {
+            event.setCancelled(true);
+            GPFlags.sendMessage(thrower, TextMode.Err, settings.pvpDeniedMessage);
+        }
     }
     
     //when an entity is set on fire
@@ -136,13 +145,24 @@ public class FlagDef_AllowPvP extends FlagDefinition
         if(damager.getType() != EntityType.PLAYER && damager.getType() != EntityType.AREA_EFFECT_CLOUD) return;
 
         //if in a flagged-for-pvp area, allow
+        //Inko: except when the damaged entity is in a no-pvp zone
         Flag flag = this.GetFlagInstanceAtLocation(damager.getLocation(), null);
-        if(flag != null) return;
+        if(flag != null) {
+            flag = this.GetFlagInstanceAtLocation(event.getEntity().getLocation(), null);
+            if (flag != null) return;
+        }
+
+        //Inko: If a players wants to self harm, let him be so. (fixes Enderpearls not dealing damage)
+        if(damager == event.getEntity()) return;
 
         //otherwise disallow
-        event.setCancelled(true);
-        if(projectile != null) projectile.remove();
-        if(sendErrorMessagesToPlayers && damager instanceof Player) GPFlags.sendMessage((Player)damager, TextMode.Err, settings.pvpDeniedMessage);
+        //Inko: cancel only if the damaged entity is a player
+        if(event.getEntityType() == EntityType.PLAYER) {
+            event.setCancelled(true);
+            if (projectile != null) projectile.remove();
+            if (sendErrorMessagesToPlayers && damager instanceof Player)
+                GPFlags.sendMessage((Player) damager, TextMode.Err, settings.pvpDeniedMessage);
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
