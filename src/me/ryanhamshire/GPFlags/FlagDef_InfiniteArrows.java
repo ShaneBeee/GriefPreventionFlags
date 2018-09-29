@@ -42,8 +42,19 @@ public class FlagDef_InfiniteArrows extends FlagDefinition
         ItemMeta metaOff = inventory.getItemInOffHand().getItemMeta();
         if(metaOff != null && metaOff.hasEnchant(Enchantment.ARROW_INFINITE) && event.getEntityType() == EntityType.ARROW) return;
         
-        arrow.remove();
-        inventory.addItem(new ItemStack(Material.ARROW));
+        if(event.getEntityType() == EntityType.ARROW) 
+        {
+         arrow.remove();
+         inventory.addItem(new ItemStack(Material.ARROW));
+         return;
+        }
+        
+        if(event.getEntityType() == EntityType.SNOWBALL) 
+        {
+         arrow.remove();
+         inventory.addItem(new ItemStack(Material.SNOW_BALL));
+         return;
+        }
     }
     
     public FlagDef_InfiniteArrows(FlagManager manager, GPFlags plugin)
