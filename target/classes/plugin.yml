@@ -5,7 +5,7 @@ softdepend: [mcMMO]
 authors: [Big_Scary, ShaneBee, DmitryRendov]
 description: GriefPrevention Add-On to set flags in claims.
 website: https://www.spigotmc.org/resources/griefprevention-flags.55773/
-version: '5.6.4'
+version: '5.7.2'
 api-version: '1.13'
 commands:
    allflags:
