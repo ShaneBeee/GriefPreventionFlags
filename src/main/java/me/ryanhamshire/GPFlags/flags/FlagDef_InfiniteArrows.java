@@ -22,7 +22,7 @@ public class FlagDef_InfiniteArrows extends FlagDefinition {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onProjectileHit(ProjectileHitEvent event) {
-        if (event.getEntityType() != EntityType.ARROW && event.getEntityType() != EntityType.SNOWBALL) return;
+        if (event.getEntityType() != EntityType.ARROW) return;
 
         Projectile arrow = event.getEntity();
 
