@@ -22,6 +22,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
@@ -156,4 +157,17 @@ public class PlayerListener implements Listener {
         }
     }
 
+    @EventHandler
+    private void onRespawnEvent(PlayerRespawnEvent event) {
+	    Location loc = event.getRespawnLocation();
+        Claim claim = GriefPrevention.instance.dataStore.getClaimAt(loc, false, null);
+        if (claim != null) {
+            Flag flagOwnerFly = GPFlags.getInstance().getFlagManager().getFlag(claim, "OwnerFly");
+            Flag flagOwnerMemberFly = GPFlags.getInstance().getFlagManager().getFlag(claim, "OwnerMemberFly");
+            if (flagOwnerFly != null || flagOwnerMemberFly != null) {
+                return;
+            }
+        }
+        Util.disableFlight(event.getPlayer());
+    }
 }
