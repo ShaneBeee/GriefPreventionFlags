@@ -150,11 +150,11 @@ public class FlagsDataStore {
 
 		this.addDefault(defaults, Messages.EnableNoEnderPearl, "Now blocking ender pearl teleportation to/from this area.", null);
 		this.addDefault(defaults, Messages.DisableNoEnderPearl, "Stopped blocking ender pearl teleportation to/from this area.", null);
-		this.addDefault(defaults, Messages.NoEnderPearlInClaim, "{p}, you can not use enderpearls in {o}'s claim",
+		this.addDefault(defaults, Messages.NoEnderPearlInClaim, "{p}, you cannot use enderpearls in {o}'s claim",
 				"o: owner of claim" + " p: event player");
-		this.addDefault(defaults, Messages.NoEnderPearlToClaim, "{p}, you can not use enderpearls to teleprot to {o}'s claim",
+		this.addDefault(defaults, Messages.NoEnderPearlToClaim, "{p}, you cannot use enderpearls to teleport to {o}'s claim",
 				"o: owner of claim" + " p: event player");
-		this.addDefault(defaults, Messages.NoEnderPearlInWorld, "{p}, you can not use enderpearls in this world",
+		this.addDefault(defaults, Messages.NoEnderPearlInWorld, "{p}, you cannot use enderpearls in this world",
 				"p: event player");
 
 		this.addDefault(defaults, Messages.EnableNoMcMMOSkills, "Now blocking McMMO skill use in this area.", null);
@@ -239,14 +239,14 @@ public class FlagsDataStore {
 		this.addDefault(defaults, Messages.EnabledNoExplosionDamage, "Players will no longer take damage caused by explosions in this claim", null);
 		this.addDefault(defaults, Messages.DisabledNoExplosionDamage, "Players will now continue to take damage caused by explosions in this claim", null);
 
-		this.addDefault(defaults, Messages.NoOwnerFlag, "You can not set both OwnerFly and OwnerMemberFly flags in one claim", null);
+		this.addDefault(defaults, Messages.NoOwnerFlag, "You cannot set both OwnerFly and OwnerMemberFly flags in one claim", null);
 
 		this.addDefault(defaults, Messages.ChangeBiomeSet, "The biome in this claim has been set to {0}", "0: Biome");
 		this.addDefault(defaults, Messages.ChangeBiomeUnset, "The biome in this claim has been restored", null);
 
-		this.addDefault(defaults, Messages.NoFlagInClaim, "This flag can not be set in a claim", null);
-		this.addDefault(defaults, Messages.NoFlagInWorld, "This flag can not be set for a whole world", null);
-		this.addDefault(defaults, Messages.NoFlagInServer, "This flag can not be set for the whole server", null);
+		this.addDefault(defaults, Messages.NoFlagInClaim, "This flag cannot be set in a claim", null);
+		this.addDefault(defaults, Messages.NoFlagInWorld, "This flag cannot be set for a whole world", null);
+		this.addDefault(defaults, Messages.NoFlagInServer, "This flag cannot be set for the whole server", null);
 
 		this.addDefault(defaults, Messages.EnableNoOpenDoor, "Doors can no longer be opened in this area", null);
 		this.addDefault(defaults, Messages.DisableNoOpenDoor, "Doors can now be opened in this area", null);
@@ -254,7 +254,7 @@ public class FlagsDataStore {
 
 		this.addDefault(defaults, Messages.EnabledNoVehicle, "Vehicles can no longer be placed in this area", null);
 		this.addDefault(defaults, Messages.DisabledNoVehicle, "Vehicles can now be placed in this area", null);
-		this.addDefault(defaults, Messages.NoPlaceVehicle, "You can not place vehicles in this area", null);
+		this.addDefault(defaults, Messages.NoPlaceVehicle, "You cannot place vehicles in this area", null);
 
 		this.addDefault(defaults, Messages.EnabledNoMobSpawnsType, "The spawning of {0} has been disabled in this area", "0: Mob Types");
 		this.addDefault(defaults, Messages.DisabledNoMobSpawnsType, "The flag mobs will now be able to spawn again in this area", null);
@@ -266,7 +266,7 @@ public class FlagsDataStore {
 
 		this.addDefault(defaults, Messages.EnabledRaidMemberOnly, "Only claim members can trigger raids in this area", null);
 		this.addDefault(defaults, Messages.DisabledRaidMemberOnly, "Anyone can trigger raids in this area", null);
-		this.addDefault(defaults, Messages.RaidMemberOnlyDeny, "You can not initiate a raid in this area", null);
+		this.addDefault(defaults, Messages.RaidMemberOnlyDeny, "You cannot initiate a raid in this area", null);
 
 		//load the config file
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(messagesFilePath));
