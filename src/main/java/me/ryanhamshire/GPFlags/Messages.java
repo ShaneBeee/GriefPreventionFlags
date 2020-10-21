@@ -178,5 +178,8 @@ public enum Messages {
     DisabledNoItemDamage,
     EnabledRaidMemberOnly,
     DisabledRaidMemberOnly,
-    RaidMemberOnlyDeny
+    RaidMemberOnlyDeny,
+
+    EnabledProtectNamedMobs,
+    DisabledProtectNamedMobs
 }

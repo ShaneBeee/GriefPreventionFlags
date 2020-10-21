@@ -268,6 +268,9 @@ public class FlagsDataStore {
 		this.addDefault(defaults, Messages.DisabledRaidMemberOnly, "Anyone can trigger raids in this area", null);
 		this.addDefault(defaults, Messages.RaidMemberOnlyDeny, "You cannot initiate a raid in this area", null);
 
+		this.addDefault(defaults, Messages.EnabledProtectNamedMobs, "Named mobs will no longer take damage in this area", null);
+		this.addDefault(defaults, Messages.DisabledProtectNamedMobs, "Named mobs will continue to take damage in this area", null);
+
 		//load the config file
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(messagesFilePath));
 
