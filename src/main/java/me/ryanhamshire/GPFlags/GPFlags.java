@@ -222,6 +222,7 @@ public class GPFlags extends JavaPlugin {
             this.flagManager.registerFlagDefinition(new FlagDef_ExitCommand_Owner(this.flagManager, this));
             this.flagManager.registerFlagDefinition(new FlagDef_ExitCommand_Members(this.flagManager, this));
             this.flagManager.registerFlagDefinition(new FlagDef_NoExplosionDamage(this.flagManager, this));
+            this.flagManager.registerFlagDefinition(new FlagDef_ProtectNamedMobs(this.flagManager, this));
 
             this.flagManager.registerFlagDefinition(new FlagDef_ChangeBiome(this.flagManager, this));
             this.flagManager.registerFlagDefinition(new FlagDef_NoOpenDoors(this.flagManager, this));
