@@ -180,6 +180,6 @@ public enum Messages {
     DisabledRaidMemberOnly,
     RaidMemberOnlyDeny,
 
-    EnabledNamedMobInvulnerability,
-    DisabledNamedMobInvulnerability
+    EnabledProtectNamedMobs,
+    DisabledProtectNamedMobs
 }
