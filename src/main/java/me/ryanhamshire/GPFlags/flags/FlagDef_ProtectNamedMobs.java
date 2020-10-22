@@ -36,6 +36,7 @@ public class FlagDef_ProtectNamedMobs extends FlagDefinition {
         Entity damager = event.getDamager();
         if (damager.getType() != EntityType.PLAYER) {
             event.setCancelled(true);
+            return;
         }
 
         Player player = (Player) damager;
