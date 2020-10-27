@@ -224,8 +224,14 @@ public class FlagsDataStore {
         this.addDefault(defaults, Messages.EnableNoSnowForm, "Snow will no longer form in this area", null);
         this.addDefault(defaults, Messages.DisableNoSnowForm, "Snow will now continue to form in this area", null);
 
+        this.addDefault(defaults, Messages.EnableNoSnowMelt, "Snow will no longer melt in this area", null);
+        this.addDefault(defaults, Messages.DisableNoSnowMelt, "Snow will now continue to melt in this area", null);
+
         this.addDefault(defaults, Messages.EnableNoIceForm, "Ice will no longer form in this area", null);
         this.addDefault(defaults, Messages.DisableNoIceForm, "Ice will now continue to form in this area", null);
+
+        this.addDefault(defaults, Messages.EnableNoIceMelt, "Ice will no longer melt in this area", null);
+        this.addDefault(defaults, Messages.DisableNoIceMelt, "Ice will now continue to melt in this area", null);
 
         this.addDefault(defaults, Messages.EnabledNoFireSpread, "Fire will no longer spread in this area", null);
         this.addDefault(defaults, Messages.DisabledNoFireSpread, "Fire will now continue to spread in this area", null);
