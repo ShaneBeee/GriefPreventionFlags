@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
@@ -86,14 +86,13 @@ public class PlayerListener implements Listener {
             if (entity instanceof Player) {
                 Player player = ((Player) entity);
                 if (!processMovement(locTo, locFrom, player, null)) {
+                    vehicle.eject();
+                    ItemStack itemStack = Util.getItemFromVehicle(vehicle);
+                    if (itemStack != null) {
+                        vehicle.getWorld().dropItem(locFrom, itemStack);
+                    }
+                    vehicle.remove();
                     player.teleport(locFrom);
-                    BukkitRunnable runnable = new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            vehicle.teleport(locFrom);
-                        }
-                    };
-                    runnable.runTaskLater(GPFlags.getInstance(), 20);
                 }
             }
         }

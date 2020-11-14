@@ -173,6 +173,8 @@ public enum Messages {
     EnabledNoVehicle,
     DisabledNoVehicle,
     NoPlaceVehicle,
+    NoEnterVehicle,
+    NoVehicleAllowed,
 
     EnabledNoMobSpawnsType,
     DisabledNoMobSpawnsType,
