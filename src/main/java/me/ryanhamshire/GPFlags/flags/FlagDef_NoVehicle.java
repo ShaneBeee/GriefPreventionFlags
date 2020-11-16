@@ -17,14 +17,12 @@ import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
+import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,54 +36,41 @@ public class FlagDef_NoVehicle extends FlagDefinition {
     @EventHandler
     private void onVehicleMove(VehicleMoveEvent event) {
         Vehicle vehicle = event.getVehicle();
-        for (Entity entity : vehicle.getPassengers()) {
-            if (entity instanceof Player) {
-                Player player = ((Player) entity);
-                handleVehicleMovement(player, vehicle, event.getFrom(), event.getTo());
-            }
-        }
+        Player player;
+        Entity passenger = vehicle.getPassengers().get(0);
+        if (!(passenger instanceof Player)) return;
+        player = (Player) passenger;
+        handleVehicleMovement(player, vehicle, event.getFrom(), event.getTo(), event.getEventName());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     private void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         Entity vehicle = player.getVehicle();
         if (vehicle instanceof Vehicle) {
-            handleVehicleMovement(player, ((Vehicle) vehicle), event.getFrom(), event.getTo());
+            handleVehicleMovement(player, (Vehicle) vehicle, event.getFrom(), event.getTo(), event.getEventName());
         }
     }
 
-    private void handleVehicleMovement(Player player, Vehicle vehicle, Location locFrom, Location locTo) {
+    private void handleVehicleMovement(Player player, Vehicle vehicle, Location locFrom, Location locTo, String eventName) {
         Flag flag = this.getFlagInstanceAtLocation(locTo, player);
         if (flag != null) {
             Claim claim = GriefPrevention.instance.dataStore.getClaimAt(locTo, false, null);
-            if (!claim.hasExplicitPermission(player, ClaimPermission.Inventory)) {
-                vehicle.eject();
-                ItemStack itemStack = Util.getItemFromVehicle(vehicle);
-                if (itemStack != null) {
-                    vehicle.getWorld().dropItem(locFrom, itemStack);
-                }
-                vehicle.remove();
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoVehicleAllowed);
+            if (claim.getOwnerName().equals(player.getName())) return;
+            if (claim.hasExplicitPermission(player, ClaimPermission.Inventory)) return;
+            if (eventName.equals("PlayerTeleportEvent")) {
+                player.leaveVehicle();
+                return;
             }
-        }
-    }
-
-    @EventHandler
-    private void onPlaceVehicle(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        PlayerInventory inventory = player.getInventory();
-        EquipmentSlot hand = event.getHand();
-        Action action = event.getAction();
-
-        if (action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR) return;
-
-        if ((Util.isAVehicle(inventory.getItemInMainHand()) && hand == EquipmentSlot.HAND) ||
-                (Util.isAVehicle(inventory.getItemInOffHand()) && hand == EquipmentSlot.OFF_HAND)) {
-            Flag flag = this.getFlagInstanceAtLocation(player.getLocation(), player);
-            if (flag == null) return;
-            event.setCancelled(true);
-            GPFlags.sendMessage(player, TextMode.Err, Messages.NoPlaceVehicle);
+            vehicle.eject();
+            ItemStack itemStack = Util.getItemFromVehicle(vehicle);
+            if (itemStack != null) {
+                if (vehicle.isValid()) {
+                    vehicle.getWorld().dropItem(locFrom, itemStack);
+                    vehicle.remove();
+                }
+            }
+            GPFlags.sendMessage(player, TextMode.Err, Messages.NoVehicleAllowed);
         }
     }
 
@@ -99,11 +84,20 @@ public class FlagDef_NoVehicle extends FlagDefinition {
             Flag flag = this.getFlagInstanceAtLocation(vehicle.getLocation(), player);
             if (flag != null) {
                 Claim claim = GriefPrevention.instance.dataStore.getClaimAt(vehicle.getLocation(), false, null);
-                if (claim != null && !claim.hasExplicitPermission(player, ClaimPermission.Inventory)) {
+                if (claim != null && !claim.hasExplicitPermission(player, ClaimPermission.Inventory) && !claim.getOwnerName().equals(player.getName())) {
                     event.setCancelled(true);
                     GPFlags.sendMessage(player, TextMode.Err, Messages.NoEnterVehicle);
                 }
             }
+        }
+    }
+
+    @EventHandler
+    private void onCollision(VehicleEntityCollisionEvent event) {
+        Flag flag = this.getFlagInstanceAtLocation(event.getVehicle().getLocation(), null);
+        if (flag != null) {
+            event.setCollisionCancelled(true);
+            event.setCancelled(true);
         }
     }
 
