@@ -39,10 +39,9 @@ public class FlagDef_NoVehicle extends FlagDefinition {
         List<Entity> passengers = vehicle.getPassengers();
         if (passengers.size() == 0) return;
         Entity passenger = vehicle.getPassengers().get(0);
-        if (passenger == null) return;
         if (!(passenger instanceof Player)) return;
         Player player = (Player) passenger;
-        handleVehicleMovement(player, vehicle, event.getFrom(), event.getTo(), event.getEventName());
+        handleVehicleMovement(player, vehicle, event.getFrom(), event.getTo(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -50,17 +49,17 @@ public class FlagDef_NoVehicle extends FlagDefinition {
         Player player = event.getPlayer();
         Entity vehicle = player.getVehicle();
         if (vehicle instanceof Vehicle) {
-            handleVehicleMovement(player, (Vehicle) vehicle, event.getFrom(), event.getTo(), event.getEventName());
+            handleVehicleMovement(player, (Vehicle) vehicle, event.getFrom(), event.getTo(), true);
         }
     }
 
-    private void handleVehicleMovement(Player player, Vehicle vehicle, Location locFrom, Location locTo, String eventName) {
+    private void handleVehicleMovement(Player player, Vehicle vehicle, Location locFrom, Location locTo, boolean isTeleportEvent) {
         Flag flag = this.getFlagInstanceAtLocation(locTo, player);
         if (flag != null) {
             Claim claim = GriefPrevention.instance.dataStore.getClaimAt(locTo, false, null);
             if (claim.getOwnerName().equals(player.getName())) return;
             if (claim.hasExplicitPermission(player, ClaimPermission.Inventory)) return;
-            if (eventName.equals("PlayerTeleportEvent")) {
+            if (isTeleportEvent) {
                 player.leaveVehicle();
                 GPFlags.sendMessage(player, TextMode.Err, Messages.NoVehicleAllowed);
                 return;
