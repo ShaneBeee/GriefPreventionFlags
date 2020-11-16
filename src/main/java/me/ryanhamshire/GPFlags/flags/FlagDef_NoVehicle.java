@@ -36,6 +36,8 @@ public class FlagDef_NoVehicle extends FlagDefinition {
     @EventHandler
     private void onVehicleMove(VehicleMoveEvent event) {
         Vehicle vehicle = event.getVehicle();
+        List<Entity> passengers = vehicle.getPassengers();
+        if (passengers.size() == 0) return;
         Entity passenger = vehicle.getPassengers().get(0);
         if (passenger == null) return;
         if (!(passenger instanceof Player)) return;
