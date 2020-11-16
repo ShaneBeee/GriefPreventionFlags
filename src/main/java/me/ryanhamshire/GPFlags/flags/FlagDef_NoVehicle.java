@@ -96,8 +96,17 @@ public class FlagDef_NoVehicle extends FlagDefinition {
 
     @EventHandler
     private void onCollision(VehicleEntityCollisionEvent event) {
-        Flag flag = this.getFlagInstanceAtLocation(event.getVehicle().getLocation(), null);
+        Vehicle vehicle = event.getVehicle();
+        Flag flag = this.getFlagInstanceAtLocation(vehicle.getLocation(), null);
         if (flag != null) {
+            Entity entity = event.getEntity();
+            if (entity instanceof Player) {
+                Player player = (Player) entity;
+                Claim claim = GriefPrevention.instance.dataStore.getClaimAt(vehicle.getLocation(), false, null);
+                if (claim == null) return;
+                if (claim.getOwnerName().equals(player.getName())) return;
+                if (claim.hasExplicitPermission(player, ClaimPermission.Inventory)) return;
+            }
             event.setCollisionCancelled(true);
             event.setCancelled(true);
         }
