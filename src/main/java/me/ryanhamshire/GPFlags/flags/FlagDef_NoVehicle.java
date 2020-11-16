@@ -36,10 +36,10 @@ public class FlagDef_NoVehicle extends FlagDefinition {
     @EventHandler
     private void onVehicleMove(VehicleMoveEvent event) {
         Vehicle vehicle = event.getVehicle();
-        Player player;
         Entity passenger = vehicle.getPassengers().get(0);
+        if (passenger == null) return;
         if (!(passenger instanceof Player)) return;
-        player = (Player) passenger;
+        Player player = (Player) passenger;
         handleVehicleMovement(player, vehicle, event.getFrom(), event.getTo(), event.getEventName());
     }
 
@@ -60,6 +60,7 @@ public class FlagDef_NoVehicle extends FlagDefinition {
             if (claim.hasExplicitPermission(player, ClaimPermission.Inventory)) return;
             if (eventName.equals("PlayerTeleportEvent")) {
                 player.leaveVehicle();
+                GPFlags.sendMessage(player, TextMode.Err, Messages.NoVehicleAllowed);
                 return;
             }
             vehicle.eject();
