@@ -9,6 +9,7 @@ import me.ryanhamshire.GriefPrevention.PlayerData;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -497,6 +498,40 @@ public class CommandHandler {
             ChatColor color = result.success ? TextMode.Success : TextMode.Err;
             GPFlags.sendMessage(player, color, result.message.messageID, result.message.messageParams);
             if (result.success) plugin.getFlagManager().save();
+
+            if (args[0].equalsIgnoreCase("NoEnter") && args.length >= 2) {
+                World world = player.getWorld();
+                for (Player p: world.getPlayers()) {
+                    if (claim.contains(p.getLocation(), true, false)) {
+                        if (claim.getPermission(p.getName()) == null && !claim.getOwnerName().equals(p.getName())) {
+                            GriefPrevention.instance.ejectPlayer(p);
+                        }
+                    }
+                }
+            }
+            if (args[0].equalsIgnoreCase("NoEnterPlayer") && args.length >= 2) {
+                for (int i = 1; i < args.length; i++) {
+                    Player target = Bukkit.getPlayer(args[i]);
+                    if (target != null && target.getName().equals(args[i])) {
+                        if (claim.contains(target.getLocation(), true, false)) {
+                            if (claim.getPermission(args[i]) == null) {
+                                GriefPrevention.instance.ejectPlayer(target);
+                            }
+                        }
+                    }
+                }
+            }
+            if (args[0].equalsIgnoreCase("OwnerFly")) {
+                player.setAllowFlight(true);
+            }
+            if (args[0].equalsIgnoreCase("OwnerMemberFly")) {
+                World world = player.getWorld();
+                for (Player p: world.getPlayers()) {
+                    if (claim.contains(p.getLocation(), true, false)) {
+                        p.setAllowFlight(true);
+                    }
+                }
+            }
 
             return true;
         } else if (cmd.getName().equalsIgnoreCase("UnSetClaimFlag") && player != null) {
