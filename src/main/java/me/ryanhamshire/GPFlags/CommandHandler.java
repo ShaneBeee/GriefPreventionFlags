@@ -525,6 +525,7 @@ public class CommandHandler {
                 player.setAllowFlight(true);
             }
             if (args[0].equalsIgnoreCase("OwnerMemberFly")) {
+                player.setAllowFlight(true);
                 World world = player.getWorld();
                 for (Player p: world.getPlayers()) {
                     if (claim.contains(p.getLocation(), true, false)) {
