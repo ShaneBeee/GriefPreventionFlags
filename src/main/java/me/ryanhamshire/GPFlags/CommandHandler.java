@@ -528,7 +528,9 @@ public class CommandHandler {
                 World world = player.getWorld();
                 for (Player p: world.getPlayers()) {
                     if (claim.contains(p.getLocation(), true, false)) {
-                        p.setAllowFlight(true);
+                        if (claim.getPermission(p.getUniqueId().toString()) == ClaimPermission.Access) {
+                            p.setAllowFlight(true);
+                        }
                     }
                 }
             }
