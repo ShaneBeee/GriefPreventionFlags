@@ -5,6 +5,9 @@ package me.ryanhamshire.GPFlags;
  */
 public enum Messages {
 
+    NoCommandPermission,
+    UnknownCommand,
+    PlayerOnlyCommand,
     NoFlagsInThisClaim,
     ThatFlagNotSet,
     InvalidFlagDefName,

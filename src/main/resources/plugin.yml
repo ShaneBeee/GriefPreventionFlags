@@ -8,6 +8,8 @@ website: https://www.spigotmc.org/resources/griefprevention-flags.55773/
 version: '${project.version}'
 api-version: '1.13'
 commands:
+   gpflags:
+      description: Base command for GriefPreventFlags
    allflags:
       description: Sends a list of all flags and their flag type
       usage: /allflags

@@ -15,4 +15,11 @@ public class SetFlagResult {
         this.message = new MessageSpecifier(messageID, args);
     }
 
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public MessageSpecifier getMessage() {
+        return message;
+    }
 }

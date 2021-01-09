@@ -33,6 +33,9 @@ public class FlagsDataStore {
         HashMap<String, CustomizableMessage> defaults = new HashMap<>();
 
         //initialize defaults
+        this.addDefault(defaults, Messages.NoCommandPermission, "You do not have permission to use command: &7/gpflags &b{0}", "0:subcommand");
+        this.addDefault(defaults, Messages.UnknownCommand, "Unknown Command: &7/gpflags &c{0}", "0:subcommand");
+        this.addDefault(defaults, Messages.PlayerOnlyCommand, "Player Only Command: &7/gpflags &c{0}", "0:subcommand");
         this.addDefault(defaults, Messages.ReloadComplete, "Reloaded config settings and flags from disk.  If you've updated your GPFlags jar file, you MUST either /reload or reboot your server to activate the update.", null);
         this.addDefault(defaults, Messages.NoFlagsInThisClaim, "This claim doesn't have any flags.", null);
         this.addDefault(defaults, Messages.ThatFlagNotSet, "That flag isn't set here.", null);
@@ -44,7 +47,7 @@ public class FlagsDataStore {
         this.addDefault(defaults, Messages.FlagsDefault, "All Claims: {0}", "0:list of active default flags in all land claims");
         this.addDefault(defaults, Messages.FlagsWorld, "This World: {0}", "0:list of active flags in this world");
         this.addDefault(defaults, Messages.FlagsServer, "Entire Server: {0}", "0:list of flags which are active everywhere on the server");
-        this.addDefault(defaults, Messages.NoFlagPermission, "You don't have permission to use that flag.", null);
+        this.addDefault(defaults, Messages.NoFlagPermission, "You don't have permission to use flag: &b{0}", "0:flag name");
         this.addDefault(defaults, Messages.DefaultFlagSet, "Set flag for all land claims.  To make exceptions, move to specific land claims and use /UnSetClaimFlag.  Undo with /UnSetDefaultClaimFlag.", null);
         this.addDefault(defaults, Messages.DefaultFlagUnSet, "That flag is no longer set by default in any land claims.", null);
         this.addDefault(defaults, Messages.ServerFlagSet, "Set flag for entire server (all worlds).", null);
@@ -84,7 +87,7 @@ public class FlagsDataStore {
         this.addDefault(defaults, Messages.UnSetRespawnLocation, "Players who die in this land claim will now respawn per the usual rules.", null);
 
         this.addDefault(defaults, Messages.LocationRequired, "Please specify a location in four parts, like this: world x y z", null);
-        this.addDefault(defaults, Messages.WorldNotFound, "World not found.", null);
+        this.addDefault(defaults, Messages.WorldNotFound, "World '{0}' not found.", "0: world");
 
         this.addDefault(defaults, Messages.EnableKeepInventory, "Players will keep their inventories when they die in this land claim.", null);
         this.addDefault(defaults, Messages.DisableKeepInventory, "Now allowing players to drop their loot on death in this land claim.", null);

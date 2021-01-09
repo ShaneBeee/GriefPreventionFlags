@@ -1,14 +1,17 @@
 package me.ryanhamshire.GPFlags.util;
 
 import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -19,9 +22,15 @@ import org.bukkit.entity.minecart.PoweredMinecart;
 import org.bukkit.entity.minecart.RideableMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("WeakerAccess")
 public class Util {
+
+    private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
 
     /** Check if server is running a minimum Minecraft version
      * @param major Major version to check (Most likely just going to be 1)
@@ -153,6 +162,68 @@ public class Util {
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Shortcut for adding color to a string
+     *
+     * @param string String including color codes
+     * @return Formatted string
+     */
+    public static String getColString(String string) {
+        if (isRunningMinecraft(1, 16)) {
+            Matcher matcher = HEX_PATTERN.matcher(string);
+            while (matcher.find()) {
+                final ChatColor hexColor = ChatColor.of(matcher.group().substring(1, matcher.group().length() - 1));
+                final String before = string.substring(0, matcher.start());
+                final String after = string.substring(matcher.end());
+                string = before + hexColor + after;
+                matcher = HEX_PATTERN.matcher(string);
+            }
+        }
+        return ChatColor.translateAlternateColorCodes('&', string);
+    }
+
+    private static final String PREFIX = "&7[&bGP&3Flags&7] &r";
+
+    /**
+     * Send a {@link MessageSpecifier} to a player, or console if player is null
+     *
+     * @param player    Player to send message to, or null if to console
+     * @param color     Color of message
+     * @param specifier Message specifier to send
+     */
+    public static void sendMessage(@Nullable CommandSender player, org.bukkit.ChatColor color, MessageSpecifier specifier) {
+        sendMessage(player, color, specifier.getMessageID(), specifier.getMessageParams());
+    }
+
+    /**
+     * Send a {@link Messages Message} to a player, or console if player is null
+     *
+     * @param player    Player to send message to, or null if to console
+     * @param color     Color of message
+     * @param messageID Message to send
+     * @param args      Message parameters
+     */
+    public static void sendMessage(@Nullable CommandSender player, org.bukkit.ChatColor color, Messages messageID, String... args) {
+        String message = GPFlags.getInstance().getFlagsDataStore().getMessage(messageID, args);
+        sendMessage(player != null ? player : Bukkit.getConsoleSender(), color + message);
+    }
+
+    public static void sendMessage(CommandSender receiver, String message) {
+        receiver.sendMessage(getColString(PREFIX + message));
+    }
+
+    public static void sendMessage(CommandSender receiver, String format, Object... objects) {
+        sendMessage(receiver, String.format(format, objects));
+    }
+
+    public static void log(String message) {
+        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+    public static void log(String format, Object... objects) {
+        log(String.format(format, objects));
     }
 
 }

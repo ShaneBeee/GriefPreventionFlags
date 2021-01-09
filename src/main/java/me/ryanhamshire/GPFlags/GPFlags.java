@@ -24,7 +24,7 @@ public class GPFlags extends JavaPlugin {
 
     private static GPFlags instance;
     private VersionControl vc;
-    private CommandHandler commandHandler;
+    private CommandHandler oldCommandHandler;
     private FlagsDataStore flagsDataStore;
     private final FlagManager flagManager = new FlagManager();
     private WorldSettingsManager worldSettingsManager;
@@ -52,7 +52,11 @@ public class GPFlags extends JavaPlugin {
 
         this.flagsDataStore = new FlagsDataStore();
         reloadConfig();
-        this.commandHandler = new CommandHandler(this);
+        // Old command handler
+        // TODO remove after a while, let people get used to the new ones first
+        this.oldCommandHandler = new CommandHandler(this);
+        // New command handler
+        new me.ryanhamshire.GPFlags.commands.CommandHandler(this);
 
         new Metrics(this);
 
@@ -77,13 +81,13 @@ public class GPFlags extends JavaPlugin {
 
     //handles slash commands (moved to CommandHandler class)
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
-        return this.commandHandler.onCommand(sender, cmd, commandLabel, args);
+        return this.oldCommandHandler.onCommand(sender, cmd, commandLabel, args);
     }
 
     //handle tab completion in commands
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        return this.commandHandler.onTabComplete(sender, command, alias, args);
+        return this.oldCommandHandler.onTabComplete(sender, command, alias, args);
     }
 
     /**
@@ -159,25 +163,6 @@ public class GPFlags extends JavaPlugin {
             GPFlags.addLogEntry(color + message);
         } else {
             player.sendMessage(color + message);
-        }
-    }
-
-    /**
-     * Send a delayed message
-     *
-     * @param player       Player to send message to
-     * @param color        Color of the message, can use {@link TextMode}
-     * @param message      Message to send
-     * @param delayInTicks Delay for message to send
-     * @deprecated This isn't used anywhere within the code and will be removed in the future
-     */
-    @Deprecated // on Oct 21/2020
-    public static void sendMessage(CommandSender player, ChatColor color, String message, long delayInTicks) {
-        SendPlayerMessageTask task = new SendPlayerMessageTask(player, color, message);
-        if (delayInTicks > 0) {
-            GPFlags.instance.getServer().getScheduler().runTaskLater(GPFlags.instance, task, delayInTicks);
-        } else {
-            task.run();
         }
     }
 
