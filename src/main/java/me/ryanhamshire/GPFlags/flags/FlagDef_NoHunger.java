@@ -6,6 +6,7 @@ import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.SetFlagResult;
+import me.ryanhamshire.GPFlags.util.Util;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +48,7 @@ public class FlagDef_NoHunger extends TimedPlayerFlagDefinition {
                 try {
                     healAmount = Integer.parseInt(flag.parameters);
                 } catch (NumberFormatException e) {
-                    GPFlags.addLogEntry("Problem with hunger level regen amount @ " + player.getLocation().getBlock().getLocation().toString());
+                    Util.log("Problem with hunger level regen amount @ " + player.getLocation().getBlock().getLocation().toString());
                 }
             }
 

@@ -6,6 +6,7 @@ import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.SetFlagResult;
 import me.ryanhamshire.GPFlags.TextMode;
 import me.ryanhamshire.GPFlags.flags.FlagDefinition;
+import me.ryanhamshire.GPFlags.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,17 +33,17 @@ public class SetDefaultClaimFlagCmd extends BaseCmd {
 
         FlagDefinition def = PLUGIN.getFlagManager().getFlagDefinitionByName(flagName);
         if (def == null) {
-            GPFlags.sendMessage(player, TextMode.Err, getFlagDefsMessage(player));
+            Util.sendMessage(player, TextMode.Err, getFlagDefsMessage(player));
             return true;
         }
 
         if (!playerHasPermissionForFlag(def, player)) {
-            GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
+            Util.sendMessage(player, TextMode.Err, Messages.NoFlagPermission);
             return true;
         }
 
         if (!def.getFlagType().contains(FlagDefinition.FlagType.CLAIM)) {
-            GPFlags.sendMessage(player, TextMode.Err, Messages.NoFlagInClaim);
+            Util.sendMessage(player, TextMode.Err, Messages.NoFlagInClaim);
             return true;
         }
 
@@ -52,10 +53,10 @@ public class SetDefaultClaimFlagCmd extends BaseCmd {
         SetFlagResult result = PLUGIN.getFlagManager().setFlag(FlagManager.DEFAULT_FLAG_ID, def, true, params);
         ChatColor color = result.isSuccess() ? TextMode.Success : TextMode.Err;
         if (result.isSuccess()) {
-            GPFlags.sendMessage(player, color, Messages.DefaultFlagSet);
+            Util.sendMessage(player, color, Messages.DefaultFlagSet);
             PLUGIN.getFlagManager().save();
         } else {
-            GPFlags.sendMessage(player, color, result.getMessage().getMessageID(), result.getMessage().getMessageParams());
+            Util.sendMessage(player, color, result.getMessage().getMessageID(), result.getMessage().getMessageParams());
         }
 
         return true;

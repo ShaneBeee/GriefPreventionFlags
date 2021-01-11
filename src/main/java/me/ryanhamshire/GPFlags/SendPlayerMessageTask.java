@@ -1,5 +1,6 @@
 package me.ryanhamshire.GPFlags;
 
+import me.ryanhamshire.GPFlags.util.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -24,11 +25,11 @@ class SendPlayerMessageTask implements Runnable {
     @Override
     public void run() {
         if (player == null) {
-            GPFlags.addLogEntry(color + message);
+            Util.log(color + message);
             return;
         }
 
-        GPFlags.sendMessage(this.player, this.color, this.message);
+        Util.sendMessage(this.player, this.color + this.message);
     }
 
 }

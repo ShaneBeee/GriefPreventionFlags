@@ -36,13 +36,13 @@ public class UnsetClaimFlagCmd extends BaseCmd {
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, playerData.lastClaim);
 
         if (claim == null) {
-            GPFlags.sendMessage(player, TextMode.Err, Messages.StandInAClaim);
+            Util.sendMessage(player, TextMode.Err, Messages.StandInAClaim);
             return true;
         }
 
         Long claimID = claim.getID();
         if (claimID == null || claimID == -1) {
-            GPFlags.sendMessage(player, TextMode.Err, Messages.UpdateGPForSubdivisionFlags);
+            Util.sendMessage(player, TextMode.Err, Messages.UpdateGPForSubdivisionFlags);
             return true;
         }
         String flagName = args[0];

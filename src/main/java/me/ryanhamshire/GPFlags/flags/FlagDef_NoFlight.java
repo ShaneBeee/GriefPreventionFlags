@@ -6,6 +6,7 @@ import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.util.Util;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.GameMode;
@@ -44,7 +45,7 @@ public class FlagDef_NoFlight extends TimedPlayerFlagDefinition {
         if (ownerFly != null && claim.ownerID.toString().equalsIgnoreCase(player.getUniqueId().toString())) return;
         if (ownerMember != null && claim.allowAccess(player) == null) return;
 
-        GPFlags.sendMessage(player, TextMode.Err, Messages.CantFlyHere);
+        Util.sendMessage(player, TextMode.Err, Messages.CantFlyHere);
         player.setFlying(false);
         GameMode mode = player.getGameMode();
         if (mode != GameMode.CREATIVE && mode != GameMode.SPECTATOR) {
@@ -73,7 +74,7 @@ public class FlagDef_NoFlight extends TimedPlayerFlagDefinition {
         Flag flag = this.GetFlagInstanceAtLocation(player.getLocation(), player);
         if (flag == null) return;
 
-        GPFlags.sendMessage(player, TextMode.Err, Messages.CantFlyHere);
+        Util.sendMessage(player, TextMode.Err, Messages.CantFlyHere);
         event.setCancelled(true);
         player.setAllowFlight(false);
     }

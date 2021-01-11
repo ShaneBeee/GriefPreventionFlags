@@ -61,7 +61,7 @@ public class FlagDef_NoVehicle extends FlagDefinition {
             if (claim.hasExplicitPermission(player, ClaimPermission.Inventory)) return;
             if (isTeleportEvent) {
                 player.leaveVehicle();
-                GPFlags.sendMessage(player, TextMode.Err, Messages.NoVehicleAllowed);
+                Util.sendMessage(player, TextMode.Err, Messages.NoVehicleAllowed);
                 return;
             }
             vehicle.eject();
@@ -72,7 +72,7 @@ public class FlagDef_NoVehicle extends FlagDefinition {
                     vehicle.remove();
                 }
             }
-            GPFlags.sendMessage(player, TextMode.Err, Messages.NoVehicleAllowed);
+            Util.sendMessage(player, TextMode.Err, Messages.NoVehicleAllowed);
         }
     }
 
@@ -88,7 +88,7 @@ public class FlagDef_NoVehicle extends FlagDefinition {
                 Claim claim = GriefPrevention.instance.dataStore.getClaimAt(vehicle.getLocation(), false, null);
                 if (claim != null && !claim.hasExplicitPermission(player, ClaimPermission.Inventory) && !claim.getOwnerName().equals(player.getName())) {
                     event.setCancelled(true);
-                    GPFlags.sendMessage(player, TextMode.Err, Messages.NoEnterVehicle);
+                    Util.sendMessage(player, TextMode.Err, Messages.NoEnterVehicle);
                 }
             }
         }

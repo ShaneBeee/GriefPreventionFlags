@@ -6,7 +6,7 @@ import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.WorldSettings;
-import me.ryanhamshire.GPFlags.util.VersionControl;
+import me.ryanhamshire.GPFlags.util.Util;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,8 +18,6 @@ import java.util.List;
 
 public class FlagDef_NoMonsterSpawns extends FlagDefinition {
 
-    private final VersionControl vc = GPFlags.getInstance().getVersionControl();
-
     public FlagDef_NoMonsterSpawns(FlagManager manager, GPFlags plugin) {
         super(manager, plugin);
     }
@@ -27,7 +25,7 @@ public class FlagDef_NoMonsterSpawns extends FlagDefinition {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntitySpawn(CreatureSpawnEvent event) {
         LivingEntity entity = event.getEntity();
-        if (!vc.isMonster(entity)) return;
+        if (!Util.isMonster(entity)) return;
 
         SpawnReason reason = event.getSpawnReason();
 

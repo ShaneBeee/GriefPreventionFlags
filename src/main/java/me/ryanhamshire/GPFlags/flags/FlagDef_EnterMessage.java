@@ -7,6 +7,7 @@ import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.SetFlagResult;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.util.Util;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Location;
@@ -50,7 +51,7 @@ public class FlagDef_EnterMessage extends PlayerMovementFlagDefinition {
             message = message.replace("%owner%", claimTo.getOwnerName()).replace("%name%", player.getName());
         }
 
-        GPFlags.sendMessage(player, TextMode.Info, prefix + message);
+        Util.sendMessage(player, TextMode.Info, prefix + message);
         return true;
     }
 
@@ -62,7 +63,7 @@ public class FlagDef_EnterMessage extends PlayerMovementFlagDefinition {
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, null);
         String message = flag.parameters;
         message = message.replace("%owner%", claim.getOwnerName()).replace("%name%", player.getName());
-        GPFlags.sendMessage(player, TextMode.Info, prefix + message);
+        Util.sendMessage(player, TextMode.Info, prefix + message);
     }
 
     @Override

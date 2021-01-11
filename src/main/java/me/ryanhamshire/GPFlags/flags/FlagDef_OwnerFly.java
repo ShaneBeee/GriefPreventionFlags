@@ -6,6 +6,7 @@ import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.util.Util;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Bukkit;
@@ -48,12 +49,12 @@ public class FlagDef_OwnerFly extends PlayerMovementFlagDefinition implements Li
                 if (to.getY() - block.getY() >= 4) {
                     GPFlags.getInstance().getPlayerListener().addFallingPlayer(player);
                 }
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
                 return true;
             }
             if (player.getAllowFlight() && !canFly(player)) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
             }
             return true;
         }
@@ -63,18 +64,18 @@ public class FlagDef_OwnerFly extends PlayerMovementFlagDefinition implements Li
         if (!claim.getOwnerName().equalsIgnoreCase(player.getName())) {
             if (!canFly(player)) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
             }
             if (!canFly(player)) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
             }
             return true;
         }
 
         Bukkit.getScheduler().runTaskLater(GPFlags.getInstance(), () -> {
             player.setAllowFlight(true);
-            GPFlags.sendMessage(player, TextMode.Success, Messages.EnterFlightEnabled);
+            Util.sendMessage(player, TextMode.Success, Messages.EnterFlightEnabled);
         }, 1);
         return true;
     }

@@ -3,6 +3,7 @@ package me.ryanhamshire.GPFlags.commands;
 import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.util.Util;
 import org.bukkit.command.CommandSender;
 
 public class ReloadCmd extends BaseCmd {
@@ -16,7 +17,7 @@ public class ReloadCmd extends BaseCmd {
     @Override
     boolean execute(CommandSender sender, String[] args) {
         PLUGIN.reloadConfig();
-        GPFlags.sendMessage(sender, TextMode.Success, Messages.ReloadComplete);
+        Util.sendMessage(sender, TextMode.Success, Messages.ReloadComplete);
         return true;
     }
 

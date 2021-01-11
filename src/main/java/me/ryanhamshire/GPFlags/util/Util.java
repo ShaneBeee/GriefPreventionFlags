@@ -1,6 +1,7 @@
 package me.ryanhamshire.GPFlags.util;
 
 import me.ryanhamshire.GPFlags.GPFlags;
+import me.ryanhamshire.GPFlags.GPFlagsConfig;
 import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
@@ -13,6 +14,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.CommandMinecart;
@@ -30,6 +34,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("WeakerAccess")
 public class Util {
 
+    private static final String PREFIX = "&7[&bGP&3Flags&7] &r";
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
 
     /** Check if server is running a minimum Minecraft version
@@ -48,7 +53,7 @@ public class Util {
      * @return True if running this version or higher
      */
     public static boolean isRunningMinecraft(int major, int minor, int revision) {
-        String[] version = Bukkit.getServer().getBukkitVersion().split("-")[0].split("\\.");
+        String[] version = getMinecraftVersion().split("\\.");
         int maj = Integer.parseInt(version[0]);
         int min = Integer.parseInt(version[1]);
         int rev;
@@ -58,6 +63,15 @@ public class Util {
             rev = 0;
         }
         return maj > major || min > minor || (min == minor && rev >= revision);
+    }
+
+    /**
+     * Get the Minecraft version the server is running
+     *
+     * @return Minecraft version the server is running
+     */
+    public static String getMinecraftVersion() {
+        return Bukkit.getBukkitVersion().split("-")[0];
     }
 
 
@@ -76,11 +90,11 @@ public class Util {
             if (loc.getY() - block.getY() >= 4) {
                 GPFlags.getInstance().getPlayerListener().addFallingPlayer(player);
             }
-            GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+            Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
         }
         if (player.getAllowFlight() && !canFly(player)) {
             player.setAllowFlight(false);
-            GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+            Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
         }
     }
 
@@ -164,6 +178,12 @@ public class Util {
         return false;
     }
 
+    public static boolean isMonster(Entity entity) {
+        EntityType type = entity.getType();
+        return (entity instanceof Monster || type == EntityType.GHAST || type == EntityType.MAGMA_CUBE || type == EntityType.SHULKER
+                || type == EntityType.PHANTOM || type == EntityType.SLIME);
+    }
+
     /**
      * Shortcut for adding color to a string
      *
@@ -184,8 +204,6 @@ public class Util {
         return ChatColor.translateAlternateColorCodes('&', string);
     }
 
-    private static final String PREFIX = "&7[&bGP&3Flags&7] &r";
-
     /**
      * Send a {@link MessageSpecifier} to a player, or console if player is null
      *
@@ -195,6 +213,10 @@ public class Util {
      */
     public static void sendMessage(@Nullable CommandSender player, org.bukkit.ChatColor color, MessageSpecifier specifier) {
         sendMessage(player, color, specifier.getMessageID(), specifier.getMessageParams());
+    }
+
+    public static void sendMessage(@Nullable CommandSender player, org.bukkit.ChatColor color, String message) {
+        sendMessage(player, color + message);
     }
 
     /**
@@ -210,8 +232,12 @@ public class Util {
         sendMessage(player != null ? player : Bukkit.getConsoleSender(), color + message);
     }
 
-    public static void sendMessage(CommandSender receiver, String message) {
-        receiver.sendMessage(getColString(PREFIX + message));
+    public static void sendMessage(@Nullable CommandSender receiver, String message) {
+        if (receiver != null) {
+            receiver.sendMessage(getColString(PREFIX + message));
+        } else {
+            log(message);
+        }
     }
 
     public static void sendMessage(CommandSender receiver, String format, Object... objects) {
@@ -219,11 +245,17 @@ public class Util {
     }
 
     public static void log(String message) {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        Bukkit.getConsoleSender().sendMessage(getColString(PREFIX + message));
     }
 
     public static void log(String format, Object... objects) {
         log(String.format(format, objects));
+    }
+
+    public static void logFlagCommands(String log) {
+        if (GPFlagsConfig.LOG_ENTER_EXIT_COMMANDS) {
+            Util.log(log);
+        }
     }
 
 }

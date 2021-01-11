@@ -5,7 +5,7 @@ import me.ryanhamshire.GPFlags.FlagManager;
 import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
-import me.ryanhamshire.GPFlags.util.VersionControl;
+import me.ryanhamshire.GPFlags.util.Util;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
@@ -22,20 +22,17 @@ import java.util.List;
 
 public class FlagDef_NoPlayerDamageByMonster extends FlagDefinition {
 
-    private final VersionControl vc;
-
     public FlagDef_NoPlayerDamageByMonster(FlagManager manager, GPFlags plugin) {
         super(manager, plugin);
-        this.vc = plugin.getVersionControl();
     }
 
     @EventHandler
     private void onDamage(EntityDamageByEntityEvent event) {
         Entity damager = event.getDamager();
-        if (!vc.isMonster(damager) && !(damager instanceof Projectile)) return;
+        if (!Util.isMonster(damager) && !(damager instanceof Projectile)) return;
         Entity victim = event.getEntity();
         if (!(victim instanceof Player)) return;
-        Flag flag = this.GetFlagInstanceAtLocation(victim.getLocation(), null);
+        Flag flag = this.getFlagInstanceAtLocation(victim.getLocation(), null);
         if (flag == null) return;
         if (damager instanceof Projectile) {
             Projectile projectile = ((Projectile) damager);
@@ -57,7 +54,7 @@ public class FlagDef_NoPlayerDamageByMonster extends FlagDefinition {
         if (event.getCause() != EntityPotionEffectEvent.Cause.ATTACK) return;
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
-            Flag flag = this.GetFlagInstanceAtLocation(entity.getLocation(), null);
+            Flag flag = this.getFlagInstanceAtLocation(entity.getLocation(), null);
             if (flag == null) return;
             event.setCancelled(true);
         }
@@ -67,9 +64,9 @@ public class FlagDef_NoPlayerDamageByMonster extends FlagDefinition {
     private void onTarget(EntityTargetLivingEntityEvent event) {
         LivingEntity target = event.getTarget();
         if (!(target instanceof Player)) return;
-        if (!vc.isMonster(event.getEntity())) return;
+        if (!Util.isMonster(event.getEntity())) return;
 
-        Flag flag = this.GetFlagInstanceAtLocation(target.getLocation(), null);
+        Flag flag = this.getFlagInstanceAtLocation(target.getLocation(), null);
         if (flag == null) return;
 
         event.setCancelled(true);

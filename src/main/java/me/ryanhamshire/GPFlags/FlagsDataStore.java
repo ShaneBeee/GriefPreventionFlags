@@ -1,5 +1,6 @@
 package me.ryanhamshire.GPFlags;
 
+import me.ryanhamshire.GPFlags.util.Util;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -292,7 +293,7 @@ public class FlagsDataStore {
 
             //if default is missing, log an error and use some fake data for now so that the plugin can run
             if (messageData == null) {
-                GPFlags.addLogEntry("Missing message for " + messageID.name() + ".  Please contact the developer.");
+                Util.log("Missing message for " + messageID.name() + ".  Please contact the developer.");
                 messageData = new CustomizableMessage(messageID, "Missing message!  ID: " + messageID.name() + ".  Please contact a server admin.", null);
             }
 
@@ -311,7 +312,7 @@ public class FlagsDataStore {
         try {
             config.save(FlagsDataStore.messagesFilePath);
         } catch (IOException exception) {
-            GPFlags.addLogEntry("Unable to write to the configuration file at \"" + FlagsDataStore.messagesFilePath + "\"");
+            Util.log("Unable to write to the configuration file at \"" + FlagsDataStore.messagesFilePath + "\"");
         }
 
         defaults.clear();
