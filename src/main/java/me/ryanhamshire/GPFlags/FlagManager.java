@@ -2,6 +2,7 @@ package me.ryanhamshire.GPFlags;
 
 import com.google.common.io.Files;
 import me.ryanhamshire.GPFlags.flags.FlagDefinition;
+import me.ryanhamshire.GPFlags.util.Util;
 import me.ryanhamshire.GriefPrevention.Claim;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -136,7 +138,7 @@ public class FlagManager {
     }
 
     /**
-     * Get a registered flag in a claim
+     * Get a registered/default flag in a claim
      *
      * @param claimID ID of claim
      * @param flagDef Flag definition to get
@@ -148,7 +150,7 @@ public class FlagManager {
     }
 
     /**
-     * Get a registered flag in a claim
+     * Get a registered/default flag in a claim
      *
      * @param claim Claim to get a flag from
      * @param flag  Name of flag definition to get
@@ -160,7 +162,7 @@ public class FlagManager {
     }
 
     /**
-     * Get a registered flag in a claim
+     * Get a registered/default flag in a claim
      *
      * @param claimID ID of claim
      * @param flag    Name of flag definition to get
@@ -168,9 +170,20 @@ public class FlagManager {
      */
     public Flag getFlag(String claimID, String flag) {
         if (claimID == null || flag == null) return null;
+        String flagString = flag.toLowerCase(Locale.ROOT);
         ConcurrentHashMap<String, Flag> claimFlags = this.flags.get(claimID);
-        if (claimFlags == null) return null;
-        return claimFlags.get(flag.toLowerCase());
+        if (claimFlags != null) {
+            if (claimFlags.containsKey(flagString)) {
+                return claimFlags.get(flagString);
+            }
+        }
+        ConcurrentHashMap<String, Flag> defaultFlags = this.flags.get(DEFAULT_FLAG_ID);
+        if (defaultFlags != null) {
+            if (defaultFlags.containsKey(flagString)) {
+                return defaultFlags.get(flagString);
+            }
+        }
+        return null;
     }
 
     /**
@@ -257,7 +270,7 @@ public class FlagManager {
         try {
             this.save(FlagsDataStore.flagsFilePath);
         } catch (Exception e) {
-            GPFlags.addLogEntry("Failed to save flag data.  Details:");
+            Util.log("Failed to save flag data.  Details:");
             e.printStackTrace();
         }
     }
