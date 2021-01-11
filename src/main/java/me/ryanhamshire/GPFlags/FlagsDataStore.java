@@ -49,7 +49,7 @@ public class FlagsDataStore {
         this.addDefault(defaults, Messages.FlagsWorld, "This World: {0}", "0:list of active flags in this world");
         this.addDefault(defaults, Messages.FlagsServer, "Entire Server: {0}", "0:list of flags which are active everywhere on the server");
         this.addDefault(defaults, Messages.NoFlagPermission, "You don't have permission to use flag: &b{0}", "0:flag name");
-        this.addDefault(defaults, Messages.DefaultFlagSet, "Set flag for all land claims.  To make exceptions, move to specific land claims and use /UnSetClaimFlag.  Undo with /UnSetDefaultClaimFlag.", null);
+        this.addDefault(defaults, Messages.DefaultFlagSet, "Set flag for all land claims.  To make exceptions, move to specific land claims and use '/gpflags UnSetClaimFlag'.  Undo with '/gpflags UnSetDefaultClaimFlag'.", null);
         this.addDefault(defaults, Messages.DefaultFlagUnSet, "That flag is no longer set by default in any land claims.", null);
         this.addDefault(defaults, Messages.ServerFlagSet, "Set flag for entire server (all worlds).", null);
         this.addDefault(defaults, Messages.ServerFlagUnSet, "That flag is no longer set at the server level.", null);
