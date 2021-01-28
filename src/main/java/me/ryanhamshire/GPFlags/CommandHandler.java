@@ -514,7 +514,7 @@ public class CommandHandler {
             if (args[0].equalsIgnoreCase("NoEnterPlayer") && args.length >= 2) {
                 for (int i = 1; i < args.length; i++) {
                     Player target = Bukkit.getPlayer(args[i]);
-                    if (target != null && target.getName().equals(args[i])) {
+                    if (target != null && target.getName().equalsIgnoreCase(args[i])) {
                         if (claim.contains(target.getLocation(), true, false)) {
                             if (claim.getPermission(args[i]) == null) {
                                 GriefPrevention.instance.ejectPlayer(target);
