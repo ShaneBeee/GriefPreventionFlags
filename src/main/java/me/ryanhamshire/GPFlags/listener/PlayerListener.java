@@ -136,9 +136,6 @@ public class PlayerListener implements Listener {
         Flag flagOwnerFly = FLAG_MANAGER.getFlag(claim, "OwnerFly");
         Flag flagOwnerMemberFly = FLAG_MANAGER.getFlag(claim, "OwnerMemberFly");
         assert world != null;
-        Util.log("Attempting to delete claim: " + claim);
-        Util.log("OwnerFly: " + flagOwnerFly);
-        Util.log("OwnerMemberFly: " + flagOwnerMemberFly);
         if (flagOwnerFly != null || flagOwnerMemberFly != null) {
             for (Player player : world.getPlayers()) {
                 if (claim.contains(player.getLocation(), false, true)) {
