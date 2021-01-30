@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 import me.ryanhamshire.GPFlags.flags.FlagDefinition;
 import me.ryanhamshire.GPFlags.util.Util;
 import me.ryanhamshire.GriefPrevention.Claim;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -26,12 +27,14 @@ public class FlagManager {
 
     private final ConcurrentHashMap<String, FlagDefinition> definitions;
     private final ConcurrentHashMap<String, ConcurrentHashMap<String, Flag>> flags;
+    private final List<String> worlds = new ArrayList<>();
 
     public static final String DEFAULT_FLAG_ID = "-2";
 
     public FlagManager() {
         this.definitions = new ConcurrentHashMap<>();
         this.flags = new ConcurrentHashMap<>();
+        Bukkit.getWorlds().forEach(world -> worlds.add(world.getName()));
     }
 
     /**
@@ -177,6 +180,7 @@ public class FlagManager {
                 return claimFlags.get(flagString);
             }
         }
+        if (claimID.equalsIgnoreCase("everywhere") || worlds.contains(claimID)) return null;
         ConcurrentHashMap<String, Flag> defaultFlags = this.flags.get(DEFAULT_FLAG_ID);
         if (defaultFlags != null) {
             if (defaultFlags.containsKey(flagString)) {
