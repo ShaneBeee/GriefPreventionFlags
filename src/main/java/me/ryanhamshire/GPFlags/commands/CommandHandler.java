@@ -111,8 +111,9 @@ public class CommandHandler implements TabExecutor {
             } else {
                 Util.sendMessage(sender, TextMode.Warn, Messages.UnknownCommand, commandString);
             }
+        } else {
+            Util.sendMessage(sender, "&6Command usage: &3&l/gpflags &r<&bcommand&r>");
         }
-        Util.sendMessage(sender, "&6Command usage: &3&l/gpflags &r<&bcommand&r>");
         return true;
     }
 
