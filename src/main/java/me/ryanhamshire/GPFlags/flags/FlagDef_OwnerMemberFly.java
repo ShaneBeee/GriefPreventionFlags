@@ -29,7 +29,7 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
     @Override
     public boolean allowMovement(Player player, Location lastLocation, Location to, Claim claimFrom, Claim claim) {
         if (lastLocation == null) return true;
-        Flag flag = GetFlagInstanceAtLocation(to, player);
+        Flag flag = getFlagInstanceAtLocation(to, player);
         Flag ownerFly = GPFlags.getInstance().getFlagManager().getFlag(claim, "OwnerFly");
 
         if (flag == null && ownerFly == null) {
@@ -60,7 +60,7 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
             }
             return true;
         }
-        if (flag == this.GetFlagInstanceAtLocation(lastLocation, player)) return true;
+        if (flag == this.getFlagInstanceAtLocation(lastLocation, player)) return true;
         if (flag == null) return true;
         if (claim == null) return true;
 
@@ -91,11 +91,11 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Flag flag = this.GetFlagInstanceAtLocation(player.getLocation(), player);
+        Flag flag = this.getFlagInstanceAtLocation(player.getLocation(), player);
         Material below = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, null);
 
-        if (flag != null && claim.allowAccess(player) == null) {
+        if (flag != null && claim != null && claim.allowAccess(player) == null) {
             player.setAllowFlight(true);
             if (below == Material.AIR) {
                 player.setFlying(true);

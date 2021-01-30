@@ -93,7 +93,7 @@ public class FlagDef_OwnerFly extends PlayerMovementFlagDefinition implements Li
         Material below = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, null);
 
-        if (flag != null && claim.getOwnerName().equalsIgnoreCase(player.getName())) {
+        if (flag != null && claim != null && claim.getOwnerName().equalsIgnoreCase(player.getName())) {
             player.setAllowFlight(true);
             if (below == Material.AIR) {
                 player.setFlying(true);
