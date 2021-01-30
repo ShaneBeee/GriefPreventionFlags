@@ -6,7 +6,7 @@ import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.WorldSettings;
-import me.ryanhamshire.GPFlags.util.VersionControl;
+import me.ryanhamshire.GPFlags.util.Util;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,7 +25,6 @@ import java.util.List;
 public class FlagDef_NoMonsters extends FlagDefinition {
 
     private final String ALLOW_TARGET_TAG = "GPF_AllowTarget";
-    private final VersionControl vc = GPFlags.getInstance().getVersionControl();
 
     public FlagDef_NoMonsters(FlagManager manager, GPFlags plugin) {
         super(manager, plugin);
@@ -34,7 +33,7 @@ public class FlagDef_NoMonsters extends FlagDefinition {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntitySpawn(CreatureSpawnEvent event) {
         LivingEntity entity = event.getEntity();
-        if (!vc.isMonster(entity)) return;
+        if (!Util.isMonster(entity)) return;
 
         CreatureSpawnEvent.SpawnReason reason = event.getSpawnReason();
 
@@ -56,7 +55,7 @@ public class FlagDef_NoMonsters extends FlagDefinition {
         if (target == null) return;
 
         Entity entity = event.getEntity();
-        if (!vc.isMonster(entity)) return;
+        if (!Util.isMonster(entity)) return;
         if (entity.hasMetadata(this.ALLOW_TARGET_TAG)) return;
 
         Flag flag = this.getFlagInstanceAtLocation(target.getLocation(), null);
@@ -70,7 +69,7 @@ public class FlagDef_NoMonsters extends FlagDefinition {
     private void onMobDamage(EntityDamageByEntityEvent event) {
         Entity target = event.getEntity();
         Entity damager = event.getDamager();
-        if (!vc.isMonster(damager)) return;
+        if (!Util.isMonster(damager)) return;
         if (damager instanceof Player) return;
         if (!(damager instanceof LivingEntity)) return;
         if (!(target instanceof Player)) return;

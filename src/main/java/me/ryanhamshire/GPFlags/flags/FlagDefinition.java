@@ -97,10 +97,11 @@ public abstract class FlagDefinition implements Listener {
                     if (flag != null && !flag.getSet()) return null;
                 }
 
-                if (flag == null) {
-                    flag = this.flagManager.getFlag(FlagManager.DEFAULT_FLAG_ID.toString(), this);
-                    if (flag != null && !flag.getSet()) return null;
-                }
+                // This should no longer be needed since the getFlag method now checks for defaults
+//                if (flag == null) {
+//                    flag = this.flagManager.getFlag(FlagManager.DEFAULT_FLAG_ID, this);
+//                    if (flag != null && !flag.getSet()) return null;
+//                }
             }
         }
 

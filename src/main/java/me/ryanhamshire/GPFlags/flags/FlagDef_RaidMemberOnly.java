@@ -6,6 +6,7 @@ import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.util.Util;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.entity.Player;
@@ -32,7 +33,7 @@ public class FlagDef_RaidMemberOnly extends FlagDefinition {
         if (claim.allowAccess(player) != null) {
             event.setCancelled(true);
             player.removePotionEffect(PotionEffectType.BAD_OMEN);
-            GPFlags.sendMessage(player, TextMode.Warn, Messages.RaidMemberOnlyDeny);
+            Util.sendMessage(player, TextMode.Warn, Messages.RaidMemberOnlyDeny);
         }
     }
 

@@ -60,7 +60,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
             if (this.getFlagInstanceAtLocation(lastLocation, player) != null) {
                 if (!settings.pvpRequiresClaimFlag) return true;
                 if (!settings.pvpExitClaimMessageEnabled) return true;
-                GPFlags.sendMessage(player, TextMode.Success, settings.pvpExitClaimMessage);
+                Util.sendMessage(player, TextMode.Success, settings.pvpExitClaimMessage);
             }
             return true;
         }
@@ -70,7 +70,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
         if (!settings.pvpRequiresClaimFlag) return true;
         if (!settings.pvpEnterClaimMessageEnabled) return true;
 
-        GPFlags.sendMessage(player, TextMode.Warn, settings.pvpEnterClaimMessage);
+        Util.sendMessage(player, TextMode.Warn, settings.pvpEnterClaimMessage);
         return true;
     }
 
@@ -90,7 +90,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
         WorldSettings settings = this.settingsManager.get(player.getWorld());
         if (!settings.pvpRequiresClaimFlag) return;
         if (!settings.pvpEnterClaimMessageEnabled) return;
-        GPFlags.sendMessage(player, TextMode.Warn, settings.pvpEnterClaimMessage);
+        Util.sendMessage(player, TextMode.Warn, settings.pvpEnterClaimMessage);
 
     }
 
@@ -165,7 +165,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
 
         // otherwise disallow
         ((Cancellable) event).setCancelled(true);
-        GPFlags.sendMessage(thrower, TextMode.Err, settings.pvpDeniedMessage);
+        Util.sendMessage(thrower, TextMode.Err, settings.pvpDeniedMessage);
     }
 
     //when an entity is set on fire
@@ -236,7 +236,7 @@ public class FlagDef_AllowPvP extends PlayerMovementFlagDefinition {
             }
         }
         if (sendErrorMessagesToPlayers && damager instanceof Player)
-            GPFlags.sendMessage(damager, TextMode.Err, settings.pvpDeniedMessage);
+            Util.sendMessage(damager, TextMode.Err, settings.pvpDeniedMessage);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)

@@ -9,6 +9,7 @@ import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.SetFlagResult;
 import me.ryanhamshire.GPFlags.TextMode;
 import me.ryanhamshire.GPFlags.WorldSettings;
+import me.ryanhamshire.GPFlags.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,7 +37,7 @@ public class FlagDef_PlayerGamemode extends PlayerMovementFlagDefinition impleme
 
             String gameMode = settings.worldGamemodeDefault;
             player.setGameMode(GameMode.valueOf(gameMode.toUpperCase()));
-            GPFlags.sendMessage(player, TextMode.Warn, Messages.PlayerGamemode, gameMode);
+            Util.sendMessage(player, TextMode.Warn, Messages.PlayerGamemode, gameMode);
 
             if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
                 Block block = player.getLocation().getBlock();
@@ -55,7 +56,7 @@ public class FlagDef_PlayerGamemode extends PlayerMovementFlagDefinition impleme
         String playerGameMode = player.getGameMode().toString();
         if (gameMode.equalsIgnoreCase(playerGameMode)) return true;
         player.setGameMode(GameMode.valueOf(gameMode.toUpperCase()));
-        GPFlags.sendMessage(player, TextMode.Warn, Messages.PlayerGamemode, gameMode);
+        Util.sendMessage(player, TextMode.Warn, Messages.PlayerGamemode, gameMode);
         return true;
     }
 

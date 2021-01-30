@@ -10,4 +10,11 @@ public class MessageSpecifier {
         this.messageParams = messageParams;
     }
 
+    public Messages getMessageID() {
+        return messageID;
+    }
+
+    public String[] getMessageParams() {
+        return messageParams;
+    }
 }

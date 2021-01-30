@@ -2,10 +2,7 @@ package me.ryanhamshire.GPFlags;
 
 import me.ryanhamshire.GPFlags.listener.PlayerListener;
 import me.ryanhamshire.GPFlags.metrics.Metrics;
-import me.ryanhamshire.GPFlags.util.Current;
-import me.ryanhamshire.GPFlags.util.Legacy;
 import me.ryanhamshire.GPFlags.util.Util;
-import me.ryanhamshire.GPFlags.util.VersionControl;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -23,8 +20,7 @@ import java.util.List;
 public class GPFlags extends JavaPlugin {
 
     private static GPFlags instance;
-    private VersionControl vc;
-    private CommandHandler commandHandler;
+    private CommandHandler oldCommandHandler;
     private FlagsDataStore flagsDataStore;
     private final FlagManager flagManager = new FlagManager();
     private WorldSettingsManager worldSettingsManager;
@@ -32,39 +28,47 @@ public class GPFlags extends JavaPlugin {
     boolean registeredFlagDefinitions = false;
     private PlayerListener playerListener;
 
-    static boolean LOG_ENTER_EXIT_COMMANDS = true;
-
     public void onEnable() {
         long start = System.currentTimeMillis();
         instance = this;
 
+        // Check if server is running MC 1.13+ (API Changes)
+        // If not running 1.13+, stop the plugin
+        if (!Util.isRunningMinecraft(1, 13)) {
+            Util.log("&cGPFlags does not support your server version: " + Util.getMinecraftVersion());
+            Util.log("&cGPFlags is only supported on 1.13+");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         this.playerListener = new PlayerListener();
         Bukkit.getPluginManager().registerEvents(playerListener, this);
 
-        // Check if server is running MC 1.13+ (API Changes)
-        if (Util.isRunningMinecraft(1, 13)) {
-            vc = new Current();
-            addLogEntry(ChatColor.GREEN + "1.13+ Version Loaded");
-        } else {
-            vc = new Legacy();
-            addLogEntry(ChatColor.GREEN + "Legacy Version Loaded");
-        }
-
         this.flagsDataStore = new FlagsDataStore();
         reloadConfig();
-        this.commandHandler = new CommandHandler(this);
+        // Old command handler
+        // TODO remove after a while, let people get used to the new ones first
+        this.oldCommandHandler = new CommandHandler(this);
+        // New command handler
+        new me.ryanhamshire.GPFlags.commands.CommandHandler(this);
 
         new Metrics(this);
 
         float finish = (float) (System.currentTimeMillis() - start) / 1000;
-        addLogEntry("Successfully loaded in &b%.2f seconds", finish);
+        Util.log("Successfully loaded in &b%.2f seconds", finish);
         if (getDescription().getVersion().contains("Beta")) {
-            addLogEntry("&eYou are running a Beta version, things may not operate as expected");
+            Util.log("&eYou are running a Beta version, things may not operate as expected");
         }
     }
 
     public void onDisable() {
-        this.flagsDataStore.close();
+        if (flagsDataStore != null) {
+            flagsDataStore.close();
+            flagsDataStore = null;
+        }
+        instance = null;
+        playerListener = null;
+        oldCommandHandler = null;
     }
 
     /**
@@ -77,38 +81,13 @@ public class GPFlags extends JavaPlugin {
 
     //handles slash commands (moved to CommandHandler class)
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
-        return this.commandHandler.onCommand(sender, cmd, commandLabel, args);
+        return this.oldCommandHandler.onCommand(sender, cmd, commandLabel, args);
     }
 
     //handle tab completion in commands
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
-        return this.commandHandler.onTabComplete(sender, command, alias, args);
-    }
-
-    /**
-     * Log a message to console
-     *
-     * @param entry Message to log
-     */
-    public static synchronized void addLogEntry(String entry) {
-        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bGP&3Flags&7] " + entry));
-    }
-
-    /**
-     * Log a formatted message to console
-     *
-     * @param format Message format
-     * @param objects Objects in format
-     */
-    public static synchronized void addLogEntry(String format, Object... objects) {
-        addLogEntry(String.format(format, objects));
-    }
-
-    public static void logFlagCommands(String log) {
-        if (LOG_ENTER_EXIT_COMMANDS) {
-            addLogEntry(log);
-        }
+        return this.oldCommandHandler.onTabComplete(sender, command, alias, args);
     }
 
     /**
@@ -117,7 +96,9 @@ public class GPFlags extends JavaPlugin {
      * @param player    Player to send message to, or null if to console
      * @param color     Color of message
      * @param specifier Message specifier to send
+     * @deprecated Use {@link Util#sendMessage(CommandSender, ChatColor, MessageSpecifier)}
      */
+    @Deprecated // Jan 9/2020
     public static void sendMessage(@Nullable CommandSender player, ChatColor color, MessageSpecifier specifier) {
         sendMessage(player, color, specifier.messageID, specifier.messageParams);
     }
@@ -129,7 +110,9 @@ public class GPFlags extends JavaPlugin {
      * @param color     Color of message
      * @param messageID Message to send
      * @param args      Message parameters
+     * @deprecated Use {@link Util#sendMessage(CommandSender, ChatColor, Messages, String...)}
      */
+    @Deprecated // Jan 9/2020
     public static void sendMessage(@Nullable CommandSender player, ChatColor color, Messages messageID, String... args) {
         String message = GPFlags.instance.flagsDataStore.getMessage(messageID, args);
         sendMessage(player, color, message);
@@ -140,7 +123,9 @@ public class GPFlags extends JavaPlugin {
      *
      * @param player  Player to send message to, or null if to console
      * @param message Message to send
+     * @deprecated Use {@link Util#sendMessage(CommandSender, String)}
      */
+    @Deprecated // Jan 9/2020
     static void sendMessage(@Nullable CommandSender player, @NotNull String message) {
         sendMessage(player, ChatColor.RESET, message);
     }
@@ -151,33 +136,16 @@ public class GPFlags extends JavaPlugin {
      * @param player  Player to send message to, or null if to console
      * @param color   Color of message
      * @param message Message to send
+     * @deprecated Use {@link Util#sendMessage(CommandSender, String)}
      */
+    @Deprecated // Jan 9/2020
     public static void sendMessage(@Nullable CommandSender player, ChatColor color, @NotNull String message) {
         if (message.length() == 0) return;
 
         if (player == null) {
-            GPFlags.addLogEntry(color + message);
+            Util.log(color + message);
         } else {
             player.sendMessage(color + message);
-        }
-    }
-
-    /**
-     * Send a delayed message
-     *
-     * @param player       Player to send message to
-     * @param color        Color of the message, can use {@link TextMode}
-     * @param message      Message to send
-     * @param delayInTicks Delay for message to send
-     * @deprecated This isn't used anywhere within the code and will be removed in the future
-     */
-    @Deprecated // on Oct 21/2020
-    public static void sendMessage(CommandSender player, ChatColor color, String message, long delayInTicks) {
-        SendPlayerMessageTask task = new SendPlayerMessageTask(player, color, message);
-        if (delayInTicks > 0) {
-            GPFlags.instance.getServer().getScheduler().runTaskLater(GPFlags.instance, task, delayInTicks);
-        } else {
-            task.run();
         }
     }
 
@@ -215,15 +183,6 @@ public class GPFlags extends JavaPlugin {
      */
     public WorldSettingsManager getWorldSettingsManager() {
         return this.worldSettingsManager;
-    }
-
-    /**
-     * Get an instance of the version control class
-     *
-     * @return Instance of the version control class
-     */
-    public VersionControl getVersionControl() {
-        return vc;
     }
 
     /**

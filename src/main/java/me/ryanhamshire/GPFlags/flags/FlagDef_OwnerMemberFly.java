@@ -6,6 +6,7 @@ import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.util.Util;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.Bukkit;
@@ -28,7 +29,7 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
     @Override
     public boolean allowMovement(Player player, Location lastLocation, Location to, Claim claimFrom, Claim claim) {
         if (lastLocation == null) return true;
-        Flag flag = GetFlagInstanceAtLocation(to, player);
+        Flag flag = getFlagInstanceAtLocation(to, player);
         Flag ownerFly = GPFlags.getInstance().getFlagManager().getFlag(claim, "OwnerFly");
 
         if (flag == null && ownerFly == null) {
@@ -49,24 +50,24 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
                 if (player.getLocation().getY() - block.getY() >= 4) {
                     GPFlags.getInstance().getPlayerListener().addFallingPlayer(player);
                 }
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
                 return true;
             }
             if (player.getAllowFlight() && mode != GameMode.CREATIVE && mode != GameMode.SPECTATOR &&
                     !player.hasPermission("gpflags.bypass.fly") && !player.hasPermission("gpflags.bypass")) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
             }
             return true;
         }
-        if (flag == this.GetFlagInstanceAtLocation(lastLocation, player)) return true;
+        if (flag == this.getFlagInstanceAtLocation(lastLocation, player)) return true;
         if (flag == null) return true;
         if (claim == null) return true;
 
         if (claim.allowAccess(player) == null) {
             Bukkit.getScheduler().runTaskLater(GPFlags.getInstance(), () -> {
                 player.setAllowFlight(true);
-                GPFlags.sendMessage(player, TextMode.Success, Messages.EnterFlightEnabled);
+                Util.sendMessage(player, TextMode.Success, Messages.EnterFlightEnabled);
             }, 1);
             return true;
         } else {
@@ -75,12 +76,12 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
                     !player.hasPermission("gpflags.bypass.fly") && !player.hasPermission("gpflags.bypass")) {
                 GPFlags.getInstance().getPlayerListener().addFallingPlayer(player);
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
             }
             if (player.getAllowFlight() && mode != GameMode.CREATIVE && mode != GameMode.SPECTATOR &&
                     !player.hasPermission("gpflags.bypass.fly") && !player.hasPermission("gpflags.bypass")) {
                 player.setAllowFlight(false);
-                GPFlags.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
+                Util.sendMessage(player, TextMode.Warn, Messages.ExitFlightDisabled);
             }
         }
         return true;
@@ -90,11 +91,11 @@ public class FlagDef_OwnerMemberFly extends PlayerMovementFlagDefinition impleme
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Flag flag = this.GetFlagInstanceAtLocation(player.getLocation(), player);
+        Flag flag = this.getFlagInstanceAtLocation(player.getLocation(), player);
         Material below = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), false, null);
 
-        if (flag != null && claim.allowAccess(player) == null) {
+        if (flag != null && claim != null && claim.allowAccess(player) == null) {
             player.setAllowFlight(true);
             if (below == Material.AIR) {
                 player.setFlying(true);

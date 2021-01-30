@@ -1,6 +1,7 @@
 package me.ryanhamshire.GPFlags.listener;
 
 import me.ryanhamshire.GPFlags.Flag;
+import me.ryanhamshire.GPFlags.FlagManager;
 import me.ryanhamshire.GPFlags.GPFlags;
 import me.ryanhamshire.GPFlags.event.PlayerClaimBorderEvent;
 import me.ryanhamshire.GPFlags.util.Util;
@@ -34,6 +35,7 @@ public class PlayerListener implements Listener {
 
     private final HashMap<Player, Boolean> fallingPlayers = new HashMap<>();
     private final DataStore dataStore = GriefPrevention.instance.dataStore;
+    private final FlagManager FLAG_MANAGER = GPFlags.getInstance().getFlagManager();
 
     @EventHandler
     private void onFall(EntityDamageEvent e) {
@@ -131,8 +133,8 @@ public class PlayerListener implements Listener {
     private void onDeleteClaim(ClaimDeletedEvent event) {
         Claim claim = event.getClaim();
         World world = claim.getGreaterBoundaryCorner().getWorld();
-        Flag flagOwnerFly = GPFlags.getInstance().getFlagManager().getFlag(claim, "OwnerFly");
-        Flag flagOwnerMemberFly = GPFlags.getInstance().getFlagManager().getFlag(claim, "OwnerMemberFly");
+        Flag flagOwnerFly = FLAG_MANAGER.getFlag(claim, "OwnerFly");
+        Flag flagOwnerMemberFly = FLAG_MANAGER.getFlag(claim, "OwnerMemberFly");
         assert world != null;
         if (flagOwnerFly != null || flagOwnerMemberFly != null) {
             for (Player player : world.getPlayers()) {

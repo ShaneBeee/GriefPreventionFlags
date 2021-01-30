@@ -7,6 +7,7 @@ import me.ryanhamshire.GPFlags.MessageSpecifier;
 import me.ryanhamshire.GPFlags.Messages;
 import me.ryanhamshire.GPFlags.SetFlagResult;
 import me.ryanhamshire.GPFlags.TextMode;
+import me.ryanhamshire.GPFlags.util.Util;
 import me.ryanhamshire.GriefPrevention.Claim;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -47,7 +48,7 @@ public class FlagDef_ExitMessage extends PlayerMovementFlagDefinition {
             message = message.replace("%owner%", claimFrom.getOwnerName()).replace("%name%", player.getName());
         }
 
-        GPFlags.sendMessage(player, TextMode.Info, prefix + message);
+        Util.sendMessage(player, TextMode.Info, prefix + message);
 
         return true;
     }
